@@ -22,7 +22,12 @@
         }
     },
     "options_page": "./options.html",
+    "oauth2": {
+        "client_id": "921155226992-6qrb7id4sspnl8tumoo6taic4nibhdkq.apps.googleusercontent.com",
+        "scopes":[""]
+    },
     "permissions": [
+        "identity",
         "activeTab",
         "tabs",
         "storage",
