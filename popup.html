@@ -5,27 +5,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emails</title>
-    <style>
-        body {
-            width: 250px;
-            height: 500px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            color: white;
-            font-size: 30px;
-            background-color: pink;
-            border-radius: 15px;
-        }
-    </style>
+    <title>NoMail</title>
+    <link rel="stylesheet" href="popup.css">
 </head>
 
+
+<!-- refer to popup_script.js to update values with data from backend -->
+
 <body>
-    <div>
-        Hello NAME
+    <div class="popup-content">
+        <div class="header">
+            <div class="title">
+                nomail
+            </div>
+            <div class="email">
+                accountname.gmail.com
+            </div>
+        </div>
+        <div class="info">
+            spam mail identified : 104
+
+            emails nomail deleted : 32
+
+            emails to be reviewed : 22
+        </div>
+        <div class="options">
+            <div class="review-list">
+                review list
+            </div>
+            <div class="settings">
+                settings icon
+            </div>
+        </div>
     </div>
 
     <script src="./popup_script.js"></script>
