@@ -1,51 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400&display=swap");
+
 @font-face {
-    font-family: 'Tajawal';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/Tajawal.woff') format('woff');
+  font-family: "Tajawal";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Tajawal.woff") format("woff");
 }
 
 body {
-    width: 225px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: rgb(14, 14, 14);
-    font-size: 30px;
-    background-color: rgb(255, 251, 243);
-    border-radius: 15px;
-    font-family: Tajawal;
+  width: 225px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(14, 14, 14);
+  font-size: 30px;
+  background-color: rgb(255, 251, 243);
+  border-radius: 15px;
+  font-family: Tajawal;
 }
 
 .popup-content {
-    display: flex;
-    flex-direction: column;
-    height: 80vh;
-    justify-content: space-between;
-    padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .header {
-    text-align: center;
+  text-align: center;
 }
 
 .title {
-    font-size: 30px;
+  font-size: 30px;
 }
 
 .email {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .info {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .options {
-    font-size: 16px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

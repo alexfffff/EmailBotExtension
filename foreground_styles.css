@@ -1,31 +1,31 @@
 .ce_main {
-    width: 400px;
-    height: 600px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    position: absolute;
-    z-index: 999999;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  width: 400px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  position: absolute;
+  z-index: 999999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    color: white;
-    background-color: red;
+  color: white;
+  background-color: green;
 }
 
 #ce_name {
-    font-size: 70px;
+  font-size: 70px;
 }
 
 #ce_button {
-    padding: 60px 30px;
-    border-radius: 5px;
+  padding: 60px 30px;
+  border-radius: 5px;
 
-    font-size: 30px;
+  font-size: 30px;
 
-    background-color: black;
+  background-color: black;
 
-    cursor: pointer;
+  cursor: pointer;
 }

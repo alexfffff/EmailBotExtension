@@ -1,41 +1,57 @@
 {
-    "name": "nomail",
-    "description": "email manager",
-    "version": "0.1.0",
-    "manifest_version": 3,
-    "icons": {
-        "16": "./images/logo-16x16.png",
-        "32": "./images/logo-32x32.png",
-        "48": "./images/logo-48x48.png",
-        "128": "./images/logo-128x128.png"
-    },
-    "background": {
-        "service_worker": "./background.js"
-    },
-    "action": {
-        "default_popup": "./popup.html",
-        "default_icons": {
-            "16": "./images/logo-16x16.png",
-            "32": "./images/logo-32x32.png",
-            "48": "./images/logo-48x48.png",
-            "128": "./images/logo-128x128.png"
-        }
-    },
-    "options_page": "./options.html",
-    "oauth2": {
-        "client_id": "921155226992-6qrb7id4sspnl8tumoo6taic4nibhdkq.apps.googleusercontent.com",
-        "scopes": [
-            ""
-        ]
-    },
-    "permissions": [
-        "identity",
-        "activeTab",
-        "tabs",
-        "storage",
-        "scripting"
-    ],
-    "host_permissions": [
-        "https://www.google.com/*"
-    ]
+  "name": "nomail",
+  "description": "email manager",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "./images/logo-16x16.png",
+    "32": "./images/logo-32x32.png",
+    "48": "./images/logo-48x48.png",
+    "128": "./images/logo-128x128.png"
+  },
+  "background": {
+    "service_worker": "./background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://mail.google.com/*",
+        "https://mail.google.com/*",
+        "http://www.mail.google.com/*",
+        "https://www.mail.google.com/*"
+      ],
+      "js": ["./foreground.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "./popup.html",
+    "default_icons": {
+      "16": "./images/logo-16x16.png",
+      "32": "./images/logo-32x32.png",
+      "48": "./images/logo-48x48.png",
+      "128": "./images/logo-128x128.png"
+    }
+  },
+  "options_page": "./options.html",
+  "oauth2": {
+    "client_id": "921155226992-6qrb7id4sspnl8tumoo6taic4nibhdkq.apps.googleusercontent.com",
+    "scopes": [""]
+  },
+  "permissions": [
+    "identity",
+    "activeTab",
+    "tabs",
+    "storage",
+    "scripting",
+    "http://*/",
+    "https://*/",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://www.google.com/*",
+    "https://mail.google.com/*",
+    "http://*/*",
+    "https://*/*"
+  ]
 }
