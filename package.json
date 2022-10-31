@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "gmail-js": "^1.1.4",
+    "googleapis": "^108.0.0",
+    "nodemailer": "^6.8.0"
+  },
+  "type": "module"
+}
