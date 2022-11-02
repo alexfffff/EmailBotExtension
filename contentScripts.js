@@ -7,7 +7,7 @@
     let currentEmail = "";
     let currentVideoBookmarks = [];
     let authToken = "";
-    const Http = new XMLHttpRequest();
+    let Http = new XMLHttpRequest();
     function listMessages() {  
       const url='https://gmail.googleapis.com/gmail/v1/users/me/messages';
       Http.open("GET", url);
@@ -15,11 +15,29 @@
       Http.setRequestHeader("Authorization", `Bearer ${authToken}`)
       Http.send();
       Http.onreadystatechange=(e)=>{
-      console.log(Http.responseText)
+        //create for loop in the response 
+        //for each message in the response, get the message id
+        //then call getEmailInfo with the message id
+        console.log(Http.responseText);
+        let response = JSON.parse(Http.responseText)
+        for (let i = 0; i < response.messages.length; i++) {
+          getEmailInfo(response.messages, i);
+        }
       }
     };
-    function getName(){
-      const url = ""
+
+    const getEmailInfo = async(response_messages, i)=> {
+      emailId = response_messages[i].id;
+      console.log(emailId)
+      Http = new XMLHttpRequest();
+      const url = `https://gmail.googleapis.com/gmail/v1/users/me/messages/${emailId}?format=minimal`;
+      Http.open("GET", url);
+      Http.setRequestHeader("Content-Type", "application/json");
+      Http.setRequestHeader("Authorization", `Bearer ${authToken}`)
+      Http.send();
+      Http.onreadystatechange=(e)=>{
+        console.log(Http.responseText)
+      }
     }
 
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
