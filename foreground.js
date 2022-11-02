@@ -17,6 +17,7 @@ const injectIconIntoContainer = icon => {
     )[1];
 
     if (iconContainer !== undefined && iconContainer != null) {
+        console.log("hi");
         iconContainer.appendChild(ce_main_container);
     } else {
         setTimeout(() => injectIconIntoContainer(icon), 200);
@@ -24,5 +25,3 @@ const injectIconIntoContainer = icon => {
 };
 
 injectIconIntoContainer(ce_main_container);
-
-console.log("hi");
