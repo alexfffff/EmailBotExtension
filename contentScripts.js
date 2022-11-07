@@ -14,14 +14,35 @@ var trashList = [];
       Http.setRequestHeader("Content-Type", "application/json");
       Http.setRequestHeader("Authorization", `Bearer ${authToken}`)
       Http.send();
-      Http.onreadystatechange=(e)=>{
+      Http.onreadystatechange=async (e)=>{
         //create for loop in the response 
         //for each message in the response, get the message id
         //then call getEmailInfo with the message id
-        console.log(Http.responseText);
-        let response = JSON.parse(Http.responseText)
-        for (let i = 0; i < response.messages.length; i++) {
-          getEmailInfo(response.messages, i);
+        // if e is undefined, then the response is not ready
+        if(Http.response === ""){
+          return;
+        } else {
+          response = JSON.parse(Http.response);
+          var requestlist = [], i;
+          for (i = 0; i < response.messages.length; i++) {
+            emailId = response.messages[i].id;
+            (function(emailId,i){
+              console.log(emailId)
+              requestlist[i] = new XMLHttpRequest();
+              const url = `https://gmail.googleapis.com/gmail/v1/users/me/messages/${emailId}?format=minimal`;
+              requestlist[i].open("GET", url);
+              requestlist[i].setRequestHeader("Content-Type", "application/json");
+              requestlist[i].setRequestHeader("Authorization", `Bearer ${authToken}`)
+              requestlist[i].send();
+              requestlist[i].onreadystatechange=(e)=>{
+                if (requestlist[i].readyState == 4 && requestlist[i].status == 200) {
+                  if(requestlist[i].response !== ""){
+                    console.log(requestlist[i].responseText)
+                  }
+               }
+              }
+            })(emailId,i);
+          }
         }
       }
     };*/
@@ -44,19 +65,20 @@ var trashList = [];
       }
     };
 
-    /*const getEmailInfo = async(response_messages, i)=> {
-      emailId = response_messages[i].id;
+
+    const getEmailInfo = async(emailId, i)=> {
       console.log(emailId)
-      Http = new XMLHttpRequest();
+      requestlist[i] = new XMLHttpRequest();
       const url = `https://gmail.googleapis.com/gmail/v1/users/me/messages/${emailId}?format=minimal`;
-      Http.open("GET", url);
-      Http.setRequestHeader("Content-Type", "application/json");
-      Http.setRequestHeader("Authorization", `Bearer ${authToken}`)
-      Http.send();
-      Http.onreadystatechange=(e)=>{
-        console.log(Http.responseText)
+      requestlist[i].open("GET", url);
+      requestlist[i].setRequestHeader("Content-Type", "application/json");
+      requestlist[i].setRequestHeader("Authorization", `Bearer ${authToken}`)
+      requestlist[i].send();
+      requestlist[i].onreadystatechange=(e)=>{
+        console.log(requestlist[i].responseText)
       }
-    }*/
+    }
+  
 
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
       const { token} = obj;
