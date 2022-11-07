@@ -1,6 +1,6 @@
 //const { gmail } = require("googleapis/build/src/apis/gmail");
 //const {google} = require('googleapis');
-
+var trashList = [];
 
 (() => {
     let youtubeLeftControls, youtubePlayer;
@@ -8,7 +8,7 @@
     let currentVideoBookmarks = [];
     let authToken = "";
     let Http = new XMLHttpRequest();
-    function listMessages() {  
+    /*function listMessages() {  
       const url='https://gmail.googleapis.com/gmail/v1/users/me/messages';
       Http.open("GET", url);
       Http.setRequestHeader("Content-Type", "application/json");
@@ -24,9 +24,27 @@
           getEmailInfo(response.messages, i);
         }
       }
+    };*/
+
+    function listTrashMessages() {  
+      const url=`https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=500&includeSpamTrash=true&q=in:trash`;
+      Http.open("GET", url);
+      Http.setRequestHeader("Content-Type", "application/json");
+      Http.setRequestHeader("Authorization", `Bearer ${authToken}`)
+      Http.send();
+      Http.onreadystatechange=(e)=>{
+        //create for loop in the response 
+        //for each message in the response, get the message id
+        //then call getEmailInfo with the message id
+        console.log(Http.responseText);
+        let response = JSON.parse(Http.responseText);
+        for (let i = 0; i < response.messages.length; i++) {
+          trashList.push(response_messages[i].id);
+        }
+      }
     };
 
-    const getEmailInfo = async(response_messages, i)=> {
+    /*const getEmailInfo = async(response_messages, i)=> {
       emailId = response_messages[i].id;
       console.log(emailId)
       Http = new XMLHttpRequest();
@@ -38,12 +56,12 @@
       Http.onreadystatechange=(e)=>{
         console.log(Http.responseText)
       }
-    }
+    }*/
 
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
       const { token} = obj;
       authToken = token;
-      listMessages()
+      //listMessages()
     });
 })();
 
