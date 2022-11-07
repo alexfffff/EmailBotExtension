@@ -8,9 +8,10 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  console.log(tab.url);
   if (
     changeInfo.status === "complete" &&
-    /^https\:\/\/mail\.google\.com\//.test(tab.url)
+    /^https\:\/\/mail\.google\.com\/./.test(tab.url)
   ) {
     chrome.scripting
       .insertCSS({
