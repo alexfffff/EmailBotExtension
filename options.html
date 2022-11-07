@@ -13,9 +13,31 @@
     <div class="settings-container">
         <div class="title">Options</div>
         <div class="content">
-            <div class="threshold-container">threshold</div>
-            <div class="auto-delete-container">toggle auto delete</div>
-            <div class="default-label-container">change default nomail inbox</div>
+            <div class="threshold-container">
+                <h2>threshold</h2>
+                <h3>lower limit</h3>
+                <h3>upper limit</h3>
+            </div>
+            <div class="auto-delete-container">
+                <h2>toggle auto delete</h2>
+                <form>
+                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                    <label for="vehicle1">move spam mail straight to trash without review</label>
+                </form>
+            </div>
+            <div class="default-label-container">
+                <h2>change default nomail inbox</h2>
+                <!-- TODO: FILL OUT OPTIONS WITH EXISTING LABELS -->
+                <form class="label-form">
+                    <!-- <label for="cars"></label> -->
+                    <select name="label" id="labels">
+                        <option value="label">label 1</option>
+                        <option value="label">label 2</option>
+                        <option value="label">label 3</option>
+                        <option value="label">label 4</option>
+                    </select>
+                </form>
+            </div>
         </div>
     </div>
     <div class="metrics-container">
@@ -24,7 +46,18 @@
             <div class="graph"></div>
         </div>
 
-        <div class="numbers-container">Metrics</div>
+        <div class="numbers-container">
+            <h2>Metrics</h2>
+            <div class="metric-row">
+                total emails deleted
+            </div>
+            <div class="metric-row">
+                total spam identified
+            </div>
+            <div class="metric-row">
+                false detected emails
+            </div>
+        </div>
     </div>
 
 
