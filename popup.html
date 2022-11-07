@@ -1,45 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NoMail</title>
-    <link rel="stylesheet" href="popup.css">
-</head>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
 
+  <!-- refer to popup_script.js to update values with data from backend -->
 
-<!-- refer to popup_script.js to update values with data from backend -->
-
-<body>
+  <body>
     <div class="popup-content">
-        <div class="header">
-            <div class="title">
-                nomail
-            </div>
-            <div class="email">
-                accountname.gmail.com
-            </div>
+      <div class="header">
+        <div class="title">nomail</div>
+        <div class="email">accountname.gmail.com</div>
+      </div>
+      <div class="info">
+        <div class="info--title">this week</div>
+        <div class="info--details">
+          emails in review
+          <div>20</div>
         </div>
-        <div class="info">
-            spam mail identified : 104
-
-            emails nomail deleted : 32
-
-            emails to be reviewed : 22
+        <div class="info--details">
+          emails detected
+          <div>41</div>
         </div>
-        <div class="options">
-            <div class="review-list">
-                review list
-            </div>
-            <div class="settings">
-                settings icon
-            </div>
+        <div class="info--details">
+          emails deleted
+          <div>103</div>
         </div>
+      </div>
+      <div class="options">
+        <a class="link" href="./options.html">review list</a>
+        <a class="link" href="./options.html" target="_blank"
+          >options/analytics</a
+        >
+      </div>
     </div>
 
     <script src="./popup_script.js"></script>
-</body>
-
+  </body>
 </html>
