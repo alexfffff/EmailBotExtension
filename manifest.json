@@ -20,8 +20,10 @@
         "http://www.mail.google.com/*",
         "https://www.mail.google.com/*"
       ],
-      "js": ["./foreground.js"],
-      "run_at": "document_end"
+      "js": [
+        "./contentScripts.js"
+      ],
+      "run_at": "document_start"
     }
   ],
   "action": {
@@ -36,7 +38,9 @@
   "options_page": "./options.html",
   "oauth2": {
     "client_id": "921155226992-6qrb7id4sspnl8tumoo6taic4nibhdkq.apps.googleusercontent.com",
-    "scopes": [""]
+    "scopes": [
+      ""
+    ]
   },
   "permissions": [
     "identity",
