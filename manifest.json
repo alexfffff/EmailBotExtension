@@ -46,8 +46,10 @@
     ],
     "host_permissions": [
         "https://www.google.com/*",
-        "https://mail.google.com/mail/u/*", 
-        "https://*.youtube.com/*"
+        "https://mail.google.com",
+        "https://mail.google.com/*", 
+        "https://*.youtube.com/*",
+        "https://gmail.googleapis.com/*"
     ],
     "web_accessible_resources": [{
         "resources": [
