@@ -25,3 +25,19 @@ const injectIconIntoContainer = icon => {
 };
 
 injectIconIntoContainer(ce_main_container);
+
+// needed functions for frontend //
+
+// options page
+/* > get thresholds
+ * > toggle auto deletion
+ * > change default nomail label to a custom one 
+ *   (just pick from preexisting labels)
+ *   will need functions to retrieve existing labels as well as set the default label to nomail spam
+ * > get nomail marked spam from certain dates for metrics
+ * > get total nomails deleted
+ * > get total spamn identified
+ * > get total false detected emails
+ * > get total emails to be reviewed (emails in nomail label)
+ * 
+ */
