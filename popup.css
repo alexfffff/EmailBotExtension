@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400&display=swap");
+
+@font-face {
+  font-family: "Tajawal";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Tajawal.woff") format("woff");
+}
+
+body {
+  width: 260px;
+  height: 345px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(14, 14, 14);
+  font-size: 30px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 15px;
+  font-family: Tajawal;
+  margin: 0;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  font-size: 30px;
+}
+
+.email {
+  font-size: 16px;
+}
+
+.info {
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  background: #eef0f8;
+  border-radius: 10px;
+}
+
+.info--details {
+  padding: 10px 30px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  transition: 0.1s ease-out 30ms;
+}
+
+.info--details:hover {
+  padding: 10px 30px;
+  border-radius: 10px;
+  background: #d8dbee;
+}
+
+.info--title {
+  position: absolute;
+  top: 126px;
+  left: 20px;
+  font-size: 15px;
+}
+
+.options {
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  padding: 0px 17px;
+  justify-content: space-between;
+  margin-bottom: -18px;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

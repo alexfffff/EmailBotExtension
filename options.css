@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400&display=swap");
+
+@font-face {
+    font-family: "Tajawal";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/Tajawal.woff") format("woff");
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-family: Tajawal;
+    background-color: rgb(214, 201, 185);
+
+    overflow: hidden;
+}
+
+h2 {
+    font-size: 36px;
+    margin: 0;
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 32px;
+    margin: 0;
+    padding-left: 32px;
+    font-weight: normal;
+}
+
+.settings-container .title {
+    font-size: 48px;
+}
+
+.settings-container .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 95%;
+}
+
+.settings-container .content .threshold-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 30%;
+}
+
+.settings-container .content .auto-delete-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 30%;
+    font-size: 32px;
+}
+
+.settings-container .content .default-label-container .label-form {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+.settings-container .content .default-label-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 40%;
+}
+
+.settings-container {
+    width: 50vw;
+    height: 100%;
+    background-color: blueviolet;
+}
+
+.metrics-container {
+    width: 50vw;
+    height: 100%;
+    background-color: blue;
+    font-size: 36px;
+}
+
+.graph .graph-container {
+    background-color: white;
+    width: 100%;
+    height: 80%;
+}
+
+.graph-container {
+    background-color: pink;
+    width: 100%;
+    height: 50%;
+}

@@ -1,65 +1,73 @@
 {
-    "name": "nomail",
-    "description": "email manager",
-    "version": "0.1.0",
-    "manifest_version": 3,
-    "icons": {
-        "16": "./images/icon-16x16.png",
-        "32": "./images/icon-32x32.png",
-        "48": "./images/icon-48x48.png",
-        "128": "./images/icon-128x128.png"
-    },
-    "background": {
-        "service_worker": "./background.js",
-        "type":"module"
-    },
-    "action": {
-        "default_popup": "./popup.html",
-        "default_icons": {
-            "16": "./images/icon-16x16.png",
-            "32": "./images/icon-32x32.png",
-            "48": "./images/icon-48x48.png",
-            "128": "./images/icon-128x128.png"
-        }
-    },
-    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUHk3HCWTBcP90m9v6HjXv8RxJRnRPELj6/B1AyDIbwgfLM3lH7ZYvT+rW0D8N3/BxVVm7WQZzBe6OvUxrA+bMA7DqMyE4eFGVS+HvHDcl8bG5CONHs2KXQJyYJkuQE/i2pJOroD7JPq2z4RktpBYvvNP7EwKO73A7oC3ZhoucrICrbjVAUV9dEZQZ6q1WXTjIwFgCdlhyiAUAUNYYadPed8xL9sHlWD2daGmdBIjUFagiv4oXBAxieA1xsxTsSgcaQ/uZNZ52CVm1k9NdUoowDdbUfLKsqmYUuXvnhuRM275Mf8P10M5uGTmxQYga3NYOuigT+Vm3L9K7kJJ3KeXQIDAQAB",
-    "options_page": "./options.html",
-    "oauth2": {
-        "client_id": "232014406316-k6jibas3nnsgm53bapd93vpghaidr7dg.apps.googleusercontent.com",
-        "scopes":["https://mail.google.com/"]
-    },
-    "content_scripts": [
-        {
-          "matches": ["https://mail.google.com/mail/u/*"],
-          "js": ["contentScripts.js"],
-          "run_at": "document_start"
-        }
+  "name": "nomail",
+  "description": "email manager",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "./images/logo-16x16.png",
+    "32": "./images/logo-32x32.png",
+    "48": "./images/logo-48x48.png",
+    "128": "./images/logo-128x128.png"
+  },
+  "background": {
+    "service_worker": "./background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://mail.google.com/u/*",
+        "https://mail.google.com/u/*",
+        "http://www.mail.google.com/u/*",
+        "https://www.mail.google.com/u/*"
+      ],
+      "js": [
+        "./contentScripts.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "./popup.html",
+    "default_icons": {
+      "16": "./images/logo-16x16.png",
+      "32": "./images/logo-32x32.png",
+      "48": "./images/logo-48x48.png",
+      "128": "./images/logo-128x128.png"
+    }
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUHk3HCWTBcP90m9v6HjXv8RxJRnRPELj6/B1AyDIbwgfLM3lH7ZYvT+rW0D8N3/BxVVm7WQZzBe6OvUxrA+bMA7DqMyE4eFGVS+HvHDcl8bG5CONHs2KXQJyYJkuQE/i2pJOroD7JPq2z4RktpBYvvNP7EwKO73A7oC3ZhoucrICrbjVAUV9dEZQZ6q1WXTjIwFgCdlhyiAUAUNYYadPed8xL9sHlWD2daGmdBIjUFagiv4oXBAxieA1xsxTsSgcaQ/uZNZ52CVm1k9NdUoowDdbUfLKsqmYUuXvnhuRM275Mf8P10M5uGTmxQYga3NYOuigT+Vm3L9K7kJJ3KeXQIDAQAB",
+  "options_page": "./options.html",
+  "oauth2": {
+      "client_id": "232014406316-k6jibas3nnsgm53bapd93vpghaidr7dg.apps.googleusercontent.com",
+      "scopes":["https://mail.google.com/"]
+  },
+  "permissions": [
+    "activeTab",        
+    "identity",
+    "identity.email",
+    "http://*/",
+    "https://*/",
+    "identity.getAuthToken"
+    "storage",
+    "scripting",
+    "tabs",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://www.google.com/*",
+    "https://mail.google.com/*",
+    "http://*/*",
+    "https://*/*"
+    "https://gmail.googleapis.com/*",
+    "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*",
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+        "dist/gmailJsLoader.js",
+        "dist/extension.js",
+        "dist/gmailJsLoader.js.map",
+        "dist/extension.js.map"
     ],
-    "permissions": [
-        "identity",
-        "identity.email",
-        "activeTab",
-        "tabs",
-        "storage",
-        "scripting",
-        "identity.getAuthToken"
-    ],
-    "host_permissions": [
-        "https://www.google.com/*",
-        "https://mail.google.com",
-        "https://mail.google.com/*", 
-        "https://*.youtube.com/*",
-        "https://gmail.googleapis.com/*",
-        "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*",
-        "<all_urls>"
-    ],
-    "web_accessible_resources": [{
-        "resources": [
-            "dist/gmailJsLoader.js",
-            "dist/extension.js",
-            "dist/gmailJsLoader.js.map",
-            "dist/extension.js.map"
-        ],
-        "matches": ["<all_urls>"]
-    }]
+    "matches": ["<all_urls>"]
+}]
 }
