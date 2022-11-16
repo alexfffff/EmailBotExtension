@@ -15,10 +15,10 @@
   "content_scripts": [
     {
       "matches": [
-        "http://mail.google.com/u/*",
-        "https://mail.google.com/u/*",
-        "http://www.mail.google.com/u/*",
-        "https://www.mail.google.com/u/*"
+        "http://mail.google.com/u*",
+        "https://mail.google.com/u*",
+        "http://www.mail.google.com/u*",
+        "https://www.mail.google.com/u*"
       ],
       "js": [
         "./contentScripts.js"
