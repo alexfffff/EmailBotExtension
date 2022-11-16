@@ -84,50 +84,49 @@ var trashList = [];
               emailId = response.messages[i].id;
               getEmailInfo(emailId,i,requestlist);
             }
-          }
-      }
-    };
-    function testDynamoDB(){
-      let Http = new XMLHttpRequest();
-      const url='https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/send_data';
-      Http.open("POST", url);
-      Http.setRequestHeader("Content-Type", "application/json");
-      // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
-      // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
-      // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
-      Http.send();
-      Http.onreadystatechange=async (e)=>{
-          if (Http.readyState == 4 && Http.status == 200) {
-            response = JSON.parse(Http.response);
-            console.log(response);
-          }
-      }
+        }
+    }};
+    function testDynamoDB() {
+        let Http = new XMLHttpRequest();
+        const url = 'https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/send_data';
+        Http.open("POST", url);
+        Http.setRequestHeader("Content-Type", "application/json");
+        // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
+        // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
+        // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+        Http.send();
+        Http.onreadystatechange = async (e) => {
+            if (Http.readyState == 4 && Http.status == 200) {
+                response = JSON.parse(Http.response);
+                console.log(response);
+            }
+        }
     }
-    
+
 
 
     function getEmailPromise(query, queryType, body) {
-      return new Promise((resolve, reject) => {
-        let Http = new XMLHttpRequest();
-        const url='https://gmail.googleapis.com/gmail/v1/users/me' + query;
-        //const url='https://gmail.googleapis.com/gmail/v1/users/me/labels' + query;
-        Http.open(queryType, url);
-        Http.setRequestHeader("Content-Type", "application/json");
-        Http.setRequestHeader("Authorization", `Bearer ${authToken}`);
-        //Http.setRequestHeader("Access-Control-Allow-Origin", "*");
-        //Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
-        //Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
-        Http.send(body);
-        
-        Http.onload = () => {
-          if (Http.status >= 200 && Http.status < 300) {
-              resolve(Http.response);
-          } else {
-              reject(Http.statusText);
-          }
-        };
-        Http.onerror = () => reject(Http.statusText);
-      })
+        return new Promise((resolve, reject) => {
+            let Http = new XMLHttpRequest();
+            const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
+            //const url='https://gmail.googleapis.com/gmail/v1/users/me/labels' + query;
+            Http.open(queryType, url);
+            Http.setRequestHeader("Content-Type", "application/json");
+            Http.setRequestHeader("Authorization", `Bearer ${authToken}`);
+            //Http.setRequestHeader("Access-Control-Allow-Origin", "*");
+            //Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
+            //Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+            Http.send(body);
+
+            Http.onload = () => {
+                if (Http.status >= 200 && Http.status < 300) {
+                    resolve(Http.response);
+                } else {
+                    reject(Http.statusText);
+                }
+            };
+            Http.onerror = () => reject(Http.statusText);
+        })
     };
   // injectIconIntoContainer(ce_main_container);
 
@@ -146,9 +145,23 @@ var trashList = [];
   * > get total emails to be reviewed (emails in nomail label)
   * 
   */
-
 })();
 
 
 
 
+/**********************/
+// TEST FUNCTIONS HERE //
+/**********************/
+// button is located in the popup
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('testButton');
+    // function to run below
+    btn.addEventListener('click', myFunction);
+});
+
+const myFunction = () => {
+    console.log("test");
+}
