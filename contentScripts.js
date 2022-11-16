@@ -71,6 +71,7 @@ var trashList = [];
       const { token} = obj;
       authToken = token;
       promisearr = [];
+      console.log("testing")
       testDynamoDB();
 
       //get email info ${emailId}?format=minimal
