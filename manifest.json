@@ -49,7 +49,9 @@
         "https://mail.google.com",
         "https://mail.google.com/*", 
         "https://*.youtube.com/*",
-        "https://gmail.googleapis.com/*"
+        "https://gmail.googleapis.com/*",
+        "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*",
+        "<all_urls>"
     ],
     "web_accessible_resources": [{
         "resources": [
