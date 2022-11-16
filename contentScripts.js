@@ -4,6 +4,70 @@ var trashList = [];
 (() => {
     let authToken = "";
 
+    chrome.runtime.onMessage.addListener((obj, sender, response) => {
+      const { token} = obj;
+      authToken = token;
+      promisearr = [];
+      console.log("testing")
+      testDynamoDB();
+
+      //get email info ${emailId}?format=minimal
+      // listMessages("?maxResults=500&includeSpamTrash=true&q=in:trash")
+      // promisearr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", null));
+      // //promisearr.push(getEmailPromise("/labels", "GET", null));
+      // Promise.all(promisearr).then((response) => {
+      //   // resonse will be an array of responses from the request
+      //   emailinfoarr = [];
+      //   response1 = JSON.parse(response[0]);
+      //   // log the new 
+      //   //response2 = JSON.parse(response[1]);
+      //   //console.log(response2);
+      //   for (i = 0; i < response1.messages.length; i++) {
+      //     emailId = response1.messages[i].id;
+      //     emailinfoarr.push(getEmailPromise(`/messages/${emailId}?format=minimal`, "GET", null));
+      //     // add no mail label, remove trash label
+      //     emailinfoarr.push(getEmailPromise(`/${emailId}/modify`, "POST", JSON.stringify({"addLabelIds": ["Label_5248497239207726318"]})));
+      //   }
+      //   Promise.all(emailinfoarr).then((response) => { 
+
+      //     for (i = 0; i < response.length; i++) {
+      //       response[i] = JSON.parse(response[i]);
+      //       trashList.push(response[i].snippet);
+      //     }
+      //     console.log(trashList);
+      //   }).catch((error) => {console.error(error.message)});
+      // }).catch((error) => {console.error(error.message)});
+    });
+
+    // alex + lucy merge end
+    // frontend start
+
+    const ce_main_container = document.createElement("DIV");
+    const ce_name = document.createElement("DIV");
+
+    ce_main_container.classList.add("testelement");
+    ce_name.id = "ce_name";
+
+    ce_name.innerHTML = `icon`;
+
+    ce_main_container.appendChild(ce_name);
+
+    const injectIconIntoContainer = icon => {
+        // Recursively waits for the icon container to load and injects an
+        // icon into it when it does
+
+        let iconContainer = document.getElementsByClassName(
+            "G-Ni G-aE J-J5-Ji"
+        )[1];
+
+        if (iconContainer !== undefined && iconContainer != null) {
+            console.log("hi");
+            iconContainer.appendChild(ce_main_container);
+        } else {
+            setTimeout(() => injectIconIntoContainer(icon), 200);
+        }
+    };
+
     function listMessages(query) {  
       let Http = new XMLHttpRequest();
       const url='https://gmail.googleapis.com/gmail/v1/users/me/messages' + query;
@@ -65,92 +129,26 @@ var trashList = [];
         Http.onerror = () => reject(Http.statusText);
       })
     };
-  
+  // injectIconIntoContainer(ce_main_container);
 
-    chrome.runtime.onMessage.addListener((obj, sender, response) => {
-      const { token} = obj;
-      authToken = token;
-      promisearr = [];
-      console.log("testing")
-      testDynamoDB();
+  // needed functions for frontend //
 
-      //get email info ${emailId}?format=minimal
-      // listMessages("?maxResults=500&includeSpamTrash=true&q=in:trash")
+  // options page
+  /* > get thresholds
+  * > toggle auto deletion
+  * > change default nomail label to a custom one 
+  *   (just pick from preexisting labels)
+  *   will need functions to retrieve existing labels as well as set the default label to nomail spam
+  * > get nomail marked spam from certain dates for metrics
+  * > get total nomails deleted
+  * > get total spamn identified
+  * > get total false detected emails
+  * > get total emails to be reviewed (emails in nomail label)
+  * 
+  */
 
-
-      
-      // promisearr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", null));
-      // //promisearr.push(getEmailPromise("/labels", "GET", null));
-      // Promise.all(promisearr).then((response) => {
-      //   // resonse will be an array of responses from the request
-      //   emailinfoarr = [];
-      //   response1 = JSON.parse(response[0]);
-      //   // log the new 
-      //   //response2 = JSON.parse(response[1]);
-      //   //console.log(response2);
-      //   for (i = 0; i < response1.messages.length; i++) {
-      //     emailId = response1.messages[i].id;
-      //     emailinfoarr.push(getEmailPromise(`/messages/${emailId}?format=minimal`, "GET", null));
-      //     // add no mail label, remove trash label
-      //     emailinfoarr.push(getEmailPromise(`/${emailId}/modify`, "POST", JSON.stringify({"addLabelIds": ["Label_5248497239207726318"]})));
-      //   }
-      //   Promise.all(emailinfoarr).then((response) => { 
-
-      //     for (i = 0; i < response.length; i++) {
-      //       response[i] = JSON.parse(response[i]);
-      //       trashList.push(response[i].snippet);
-      //     }
-      //     console.log(trashList);
-      //   }).catch((error) => {console.error(error.message)});
-      // }).catch((error) => {console.error(error.message)});
-
-    });
 })();
 
-// alex + lucy merge end
-// frontend start
 
-const ce_main_container = document.createElement("DIV");
-const ce_name = document.createElement("DIV");
 
-ce_main_container.classList.add("testelement");
-ce_name.id = "ce_name";
-
-ce_name.innerHTML = `icon`;
-
-ce_main_container.appendChild(ce_name);
-
-const injectIconIntoContainer = icon => {
-    // Recursively waits for the icon container to load and injects an
-    // icon into it when it does
-
-    let iconContainer = document.getElementsByClassName(
-        "G-Ni G-aE J-J5-Ji"
-    )[1];
-
-    if (iconContainer !== undefined && iconContainer != null) {
-        console.log("hi");
-        iconContainer.appendChild(ce_main_container);
-    } else {
-        setTimeout(() => injectIconIntoContainer(icon), 200);
-    }
-};
-
-injectIconIntoContainer(ce_main_container);
-
-// needed functions for frontend //
-
-// options page
-/* > get thresholds
- * > toggle auto deletion
- * > change default nomail label to a custom one 
- *   (just pick from preexisting labels)
- *   will need functions to retrieve existing labels as well as set the default label to nomail spam
- * > get nomail marked spam from certain dates for metrics
- * > get total nomails deleted
- * > get total spamn identified
- * > get total false detected emails
- * > get total emails to be reviewed (emails in nomail label)
- * 
- */
 

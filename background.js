@@ -7,19 +7,9 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.tabs.onUpdated.addListener((tabId, tab) => {
   if (tab.url && tab.url.includes("mail.google.com/mail/u")) {
-    const queryParameters = tab.url.split("#")[1];
-    const urlParameters = new URLSearchParams(queryParameters);
-
-    //GET https://gmail.googleapis.com/gmail/v1/users/{userId}/history
-
-    // chrome.tabs.sendMessage(tabId, {
-    //   type: "NEW",
-    //   videoId: urlParameters.get("/")
-    // });
-
-
-
+    console.log("hey")
     chrome.identity.getAuthToken({interactive: true}, function(token) {
+      console.log(token)
        chrome.tabs.sendMessage(tabId, {
          token: token
        });
