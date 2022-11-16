@@ -47,7 +47,7 @@
     "identity.email",
     "http://*/",
     "https://*/",
-    "identity.getAuthToken"
+    "identity.getAuthToken",
     "storage",
     "scripting",
     "tabs",
@@ -57,9 +57,9 @@
     "https://www.google.com/*",
     "https://mail.google.com/*",
     "http://*/*",
-    "https://*/*"
+    "https://*/*",
     "https://gmail.googleapis.com/*",
-    "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*",
+    "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*"
   ],
   "web_accessible_resources": [{
     "resources": [
