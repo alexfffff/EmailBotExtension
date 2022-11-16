@@ -5,29 +5,61 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            color: white;
-            font-size: 80px;
-            background-color: red;
-
-            overflow: hidden;
-        }
-    </style>
+    <title>Options</title>
+    <link rel="stylesheet" href="options.css">
 </head>
 
 <body>
-    <div>
-        Hello NAME
+    <div class="settings-container">
+        <div class="title">Options</div>
+        <div class="content">
+            <div class="threshold-container">
+                <h2>threshold</h2>
+                <h3>lower limit</h3>
+                <h3>upper limit</h3>
+            </div>
+            <div class="auto-delete-container">
+                <h2>toggle auto delete</h2>
+                <form>
+                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                    <label for="vehicle1">move spam mail straight to trash without review</label>
+                </form>
+            </div>
+            <div class="default-label-container">
+                <h2>change default nomail inbox</h2>
+                <!-- TODO: FILL OUT OPTIONS WITH EXISTING LABELS -->
+                <form class="label-form">
+                    <!-- <label for="cars"></label> -->
+                    <select name="label" id="labels">
+                        <option value="label">label 1</option>
+                        <option value="label">label 2</option>
+                        <option value="label">label 3</option>
+                        <option value="label">label 4</option>
+                    </select>
+                </form>
+            </div>
+        </div>
     </div>
+    <div class="metrics-container">
+        <div class="graph-container">
+            view from ___ to ____
+            <div class="graph"></div>
+        </div>
+
+        <div class="numbers-container">
+            <h2>Metrics</h2>
+            <div class="metric-row">
+                total emails deleted
+            </div>
+            <div class="metric-row">
+                total spam identified
+            </div>
+            <div class="metric-row">
+                false detected emails
+            </div>
+        </div>
+    </div>
+
 
     <script src="./options_script.js"></script>
 </body>

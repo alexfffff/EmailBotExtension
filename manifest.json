@@ -15,13 +15,15 @@
   "content_scripts": [
     {
       "matches": [
-        "http://mail.google.com/*",
-        "https://mail.google.com/*",
-        "http://www.mail.google.com/*",
-        "https://www.mail.google.com/*"
+        "http://mail.google.com/u/*",
+        "https://mail.google.com/u/*",
+        "http://www.mail.google.com/u/*",
+        "https://www.mail.google.com/u/*"
       ],
-      "js": ["./foreground.js"],
-      "run_at": "document_end"
+      "js": [
+        "./contentScripts.js"
+      ],
+      "run_at": "document_start"
     }
   ],
   "action": {
@@ -33,25 +35,39 @@
       "128": "./images/logo-128x128.png"
     }
   },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUHk3HCWTBcP90m9v6HjXv8RxJRnRPELj6/B1AyDIbwgfLM3lH7ZYvT+rW0D8N3/BxVVm7WQZzBe6OvUxrA+bMA7DqMyE4eFGVS+HvHDcl8bG5CONHs2KXQJyYJkuQE/i2pJOroD7JPq2z4RktpBYvvNP7EwKO73A7oC3ZhoucrICrbjVAUV9dEZQZ6q1WXTjIwFgCdlhyiAUAUNYYadPed8xL9sHlWD2daGmdBIjUFagiv4oXBAxieA1xsxTsSgcaQ/uZNZ52CVm1k9NdUoowDdbUfLKsqmYUuXvnhuRM275Mf8P10M5uGTmxQYga3NYOuigT+Vm3L9K7kJJ3KeXQIDAQAB",
   "options_page": "./options.html",
   "oauth2": {
-    "client_id": "921155226992-6qrb7id4sspnl8tumoo6taic4nibhdkq.apps.googleusercontent.com",
-    "scopes": [""]
+      "client_id": "232014406316-k6jibas3nnsgm53bapd93vpghaidr7dg.apps.googleusercontent.com",
+      "scopes":["https://mail.google.com/"]
   },
   "permissions": [
+    "activeTab",        
     "identity",
-    "activeTab",
-    "tabs",
-    "storage",
-    "scripting",
+    "identity.email",
     "http://*/",
     "https://*/",
+    "identity.getAuthToken",
+    "storage",
+    "scripting",
+    "tabs",
     "webNavigation"
   ],
   "host_permissions": [
     "https://www.google.com/*",
     "https://mail.google.com/*",
     "http://*/*",
-    "https://*/*"
-  ]
+    "https://*/*",
+    "https://gmail.googleapis.com/*",
+    "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*"
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+        "dist/gmailJsLoader.js",
+        "dist/extension.js",
+        "dist/gmailJsLoader.js.map",
+        "dist/extension.js.map"
+    ],
+    "matches": ["<all_urls>"]
+}]
 }

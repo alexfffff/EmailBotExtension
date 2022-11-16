@@ -2,10 +2,10 @@ const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 
 // These id's and secrets should come from .env file.
-const CLIENT_ID = '232014406316-535cb0c2i4a3bn55hov91i8mfii7of6n.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
+const CLIENT_ID = '232014406316-i9mi5352gc7mp5goe7udav07c93v0fgo.apps.googleusercontent.com';
+const CLIENT_SECRET = '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';
 const REDIRECT_URI = 'https://developers.google.com/oauthplayground';
-const REFRESH_TOKEN = '4/0ARtbsJrxnZXNyNI9t7xaGnrnqdT34xSr-zImvTvbV2h8vvmw7QrWWJ2v51y3UdZGjubIyw';
+const REFRESH_TOKEN = '1//04UO7UE5_-ANJCgYIARAAGAQSNwF-L9IrKsuVFjq4oAMb5_Mr7Rv_cNL3LMsY8b4JRGm0sMKoIAWaNYEvs8Egrx2NXHkegGCyn_A';
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -34,8 +34,8 @@ async function sendMail() {
       from: 'Alex Dong seniordesignemailbot@gmail.com',
       to: 'alexdong040201@gmail.com',
       subject: 'Hello from gmail using API',
-      text: 'Hello from gmail email using API',
-      html: '<h1>Hello from gmail email using API</h1>',
+      text: 'second test 2',
+      html: '<h2>second test</h2>',
     };
 
     const result = await transport.sendMail(mailOptions);
