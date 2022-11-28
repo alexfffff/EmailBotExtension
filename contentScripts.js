@@ -35,6 +35,39 @@ var trashList = [];
       // }).catch((error) => {console.error(error.message)});
     });
 
+    // creates an email object
+    function createEmailJson(e, b, su, d, r, se){
+      return {
+      "emailuuid": e,
+      "body": b,
+      "subject": su,
+      "date": d,
+      "reciever": r,
+      "sender": se
+      };
+    };
+
+    // list takes in the full list of emails in the trash bin
+    function sendEmails(list){
+      let Http = new XMLHttpRequest();
+      const url='https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/send_data';
+      Http.open("POST", url);
+      Http.setRequestHeader("Content-Type", "application/json");
+      while (list.length > 0) {
+        let tempArray = list.splice(0, 25);
+        body = {
+          "emails": tempArray
+        };
+        Http.send(body);
+      }
+      Http.onreadystatechange=async (e)=>{
+          if (Http.readyState == 4 && Http.status == 200) {
+            response = JSON.parse(Http.response);
+            console.log(response);
+          }
+      }
+    }
+
     function listMessages(query) {  
       let Http = new XMLHttpRequest();
       const url='https://gmail.googleapis.com/gmail/v1/users/me/messages' + query;
