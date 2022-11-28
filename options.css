@@ -15,7 +15,7 @@ body {
     justify-content: center;
     align-items: center;
 
-    color: white;
+    color: black;
     font-family: Tajawal;
     background-color: rgb(214, 201, 185);
 
@@ -51,6 +51,8 @@ h3 {
     flex-direction: column;
     justify-content: space-evenly;
     height: 30%;
+    background-color: #F3F3F3;
+    margin: 50px;
 }
 
 .settings-container .content .auto-delete-container {
@@ -59,6 +61,8 @@ h3 {
     justify-content: space-evenly;
     height: 30%;
     font-size: 32px;
+    background-color: #F3F3F3;
+    margin: 50px;
 }
 
 .settings-container .content .default-label-container .label-form {
@@ -75,6 +79,8 @@ h3 {
     flex-direction: column;
     justify-content: space-evenly;
     height: 40%;
+    background-color: #F3F3F3;
+    margin: 50px;
 }
 
 .settings-container {
@@ -90,14 +96,22 @@ h3 {
     font-size: 36px;
 }
 
-.graph .graph-container {
+.metrics-container .graph-container .graph {
     background-color: white;
     width: 100%;
     height: 80%;
 }
 
-.graph-container {
-    background-color: pink;
+.metrics-container .graph-container {
     width: 100%;
     height: 50%;
+    background-color: #F3F3F3;
+    margin: 50px;
+}
+
+.metrics-container .numbers-container {
+    width: 100%;
+    height: 50%;
+    background-color: #F3F3F3;
+    margin: 50px;
 }
