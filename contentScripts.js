@@ -7,10 +7,6 @@ var trashList = [];
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
       const { token} = obj;
       authToken = token;
-      promisearr = [];
-      console.log("testing")
-      testDynamoDB();
-
       //get email info ${emailId}?format=minimal
       // listMessages("?maxResults=500&includeSpamTrash=true&q=in:trash")
       // promisearr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", null));
@@ -128,6 +124,16 @@ var trashList = [];
             Http.onerror = () => reject(Http.statusText);
         })
     };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('testButton');
+        // function to run below
+        btn.addEventListener('click', myFunction);
+    });
+    
+    const myFunction = () => {
+        testDynamoDB();
+    }
   // injectIconIntoContainer(ce_main_container);
 
   // needed functions for frontend //
@@ -156,12 +162,12 @@ var trashList = [];
 // button is located in the popup
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    var btn = document.getElementById('testButton');
-    // function to run below
-    btn.addEventListener('click', myFunction);
-});
+// document.addEventListener('DOMContentLoaded', function () {
+//     var btn = document.getElementById('testButton');
+//     // function to run below
+//     btn.addEventListener('click', myFunction);
+// });
 
-const myFunction = () => {
-    console.log("test");
-}
+// const myFunction = () => {
+//     console.log("test");
+// }
