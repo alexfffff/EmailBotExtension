@@ -5,17 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log("Default background color set to %cgreen", `color: ${color}`);
 });
 
-chrome.tabs.onUpdated.addListener((tabId, tab) => {
-  if (tab.url && tab.url.includes("mail.google.com/mail/u")) {
-    console.log("hey")
-    chrome.identity.getAuthToken({interactive: true}, function(token) {
-      console.log(token)
-       chrome.tabs.sendMessage(tabId, {
-         token: token
-       });
-   });
-  }
-});
+// 
 
 // chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 //   console.log(tab.url);
@@ -43,3 +33,14 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
 //       .catch((err) => console.log(err));
 //   }
 // });
+
+// chrome.tabs.onUpdated.addListener((tabId, tab) => {
+  //   if (tab.url && tab.url.includes("mail.google.com/mail/u")) {
+  //     chrome.identity.getAuthToken({interactive: true}, function(token) {
+  //       console.log(token)
+  //        chrome.tabs.sendMessage(tabId, {
+  //          token: token
+  //        });
+  //    });
+  //   }
+  // });
