@@ -13,6 +13,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     var btn = document.getElementById('testButton');
     btn.addEventListener('click', myFunction);
+
 });
 
 const myFunction = () => {
