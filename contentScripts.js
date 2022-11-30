@@ -12,36 +12,55 @@ var authToken = "";
         btn.addEventListener('click', testButtonFunction);
     });
     const testButtonFunction = () => {
-        chrome.identity.getAuthToken({interactive: true}, function(token) {
-            console.log("token: " + token);
-            let promisearr = [];
-            promisearr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", token));
-            Promise.all(promisearr).then((response) => {
-                response = JSON.parse(response[0]);
-                console.log(response);
-            }).catch((error) => {console.error(error.message)});
-         });
+        emailjsons = [
+            {
+                "emailuuid": "slfjkaklsdjfls",
+                "body": "first body",
+                "subject": "first subject",
+                "date": "date",
+                "reciever": "alexdong@gmail.com",
+                "sender": "lucy@gmail.com", 
+                "read": true
+            },
+            {
+                "emailuuid": "sfdssjjjjjj",
+                "body" : "second body",
+                "subject": "second subject",
+                "date": "date",
+                "reciever": "alexdong@gmail.com",
+                "sender": "lucy@gmail.com", 
+                "read": false
+            }
+        ];
+        Promise.all(sendEmails(emailjsons)).then((response) => {
+            console.log(response);
+        }).catch((error) => {console.error(error)});
+        // chrome.identity.getAuthToken({interactive: true}, function(token) {
+        //     console.log("token: " + token);
+
+        //  });
 
     }
     // creates an email object
-    function createEmailJson(e, b, su, d, r, se){
+    function createEmailJson(e, b, su, d, r, se, re){
       return {
       "emailuuid": e,
       "body": b,
       "subject": su,
       "date": d,
       "reciever": r,
-      "sender": se
+      "sender": se, 
+      "read": re,
       };
     };
-    // list takes in the full list of emails in the trash bin
+    // list takes in the full list of emails in the trash bin and returns a list of promises
     function sendEmails(list) {
         // iterates through every 25 emails and sends them to the backend
         let emailPromiseArr = [];
         for (let i = 0; i < list.length; i += 25) {
             let first_index = i;
             let last_index = Math.min(i + 25, list.length);
-            let emailjsons = list.splice(i, last_index);
+            let emailjsons = list.splice(first_index, last_index);
             emailPromiseArr.push(sendEmailPromise(emailjsons));
         }
         return emailPromiseArr;
@@ -57,7 +76,8 @@ var authToken = "";
             let body = {
                 "emails": emailjsons
             }
-            Http.send(body);
+
+            Http.send(JSON.stringify(body));
             Http.onload = () => {
                 if (Http.status >= 200 && Http.status < 300) {
                     resolve(Http.response);
