@@ -232,3 +232,25 @@ h3 {
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+
+  /*** number input styling ***/
+
+  input[type=number]
+  {
+    -moz-appearance: textfield;
+  }
+  
+ .custom-select input {
+    width: 45px;
+    height: 42px;
+    line-height: 1.65;
+    padding: 0;
+    margin: 0;
+    
+    border: 1px solid #eee;
+  }
+  
+  .custom-select input:focus {
+    outline: 0;
+  }
+  
