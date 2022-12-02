@@ -20,7 +20,8 @@ var authToken = "";
                 "date": "date",
                 "reciever": "alexdong@gmail.com",
                 "sender": "lucy@gmail.com", 
-                "read": true
+                "labels": "[unread, starred]", 
+                "threadid": "asfasfdasljalsdkjkl"
             },
             {
                 "emailuuid": "sfdssjjjjjj",
@@ -29,16 +30,14 @@ var authToken = "";
                 "date": "date",
                 "reciever": "alexdong@gmail.com",
                 "sender": "lucy@gmail.com", 
-                "read": false
+                "labels": "[unread, starred]", 
+                "threadid": "asfasfdasljalsdkjkl"
             }
         ];
         Promise.all(sendEmails(emailjsons)).then((response) => {
             console.log(response);
         }).catch((error) => {console.error(error)});
-        // chrome.identity.getAuthToken({interactive: true}, function(token) {
-        //     console.log("token: " + token);
 
-        //  });
 
     }
     // creates an email object
@@ -96,9 +95,6 @@ var authToken = "";
             Http.open(queryType, url);
             Http.setRequestHeader("Content-Type", "application/json");
             Http.setRequestHeader("Authorization", `Bearer ${atoken}`);
-            //Http.setRequestHeader("Access-Control-Allow-Origin", "*");
-            //Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
-            //Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
             Http.send();
 
             Http.onload = () => {
@@ -159,28 +155,14 @@ var authToken = "";
     };
   // injectIconIntoContainer(ce_main_container);
 
-  // needed functions for frontend //
-
-  // options page
-  /* > get thresholds
-  * > toggle auto deletion
-  * > change default nomail label to a custom one 
-  *   (just pick from preexisting labels)
-  *   will need functions to retrieve existing labels as well as set the default label to nomail spam
-  * > get nomail marked spam from certain dates for metrics
-  * > get total nomails deleted
-  * > get total spamn identified
-  * > get total false detected emails
-  * > get total emails to be reviewed (emails in nomail label)
-  * 
-  */
-
 })();
 
 
+        //  });
+
 // testing code 
-    // chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    //   const { token} = obj;
+    // chrome.identity.getAuthToken({interactive: true}, function(token) {
+    //     console.log("token: " + token);
     //   authToken = token;
     //   let promisearr = [];
     //   promisearr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", null));
