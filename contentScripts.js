@@ -12,44 +12,69 @@ var authToken = "";
         btn.addEventListener('click', testButtonFunction);
     });
     const testButtonFunction = () => {
-        emailjsons = [
-            {
-                "emailuuid": "slfjkaklsdjfls",
-                "body": "first body",
-                "subject": "first subject",
-                "date": "date",
-                "reciever": "alexdong@gmail.com",
-                "sender": "lucy@gmail.com", 
-                "labels": "[unread, starred]", 
-                "threadid": "asfasfdasljalsdkjkl"
-            },
-            {
-                "emailuuid": "sfdssjjjjjj",
-                "body" : "second body",
-                "subject": "second subject",
-                "date": "date",
-                "reciever": "alexdong@gmail.com",
-                "sender": "lucy@gmail.com", 
-                "labels": "[unread, starred]", 
-                "threadid": "asfasfdasljalsdkjkl"
+      chrome.identity.getAuthToken({interactive: true}, function(token) {
+        console.log("token: " + token);
+        let promisearr = [];
+        promisearr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", token));
+        Promise.all(promisearr).then((response) => {
+          emailinfoarr = [];
+          responseArray = JSON.parse(response[0]);
+          for (i = 0; i < responseArray.messages.length; i++) {
+            emailId = responseArray.messages[i].id;
+            emailinfoarr.push(getEmailPromise(`/messages/${emailId}?format=full`, "GET", token));
+            //emailinfoarr.push(getEmailPromise(`/${emailId}/modify`, "POST", JSON.stringify({"addLabelIds": ["Label_5248497239207726318"]})));
+          }
+          Promise.all(emailinfoarr).then((response2) => {
+            for (i = 0; i < response2.length; i++) {
+              response2[i] = JSON.parse(response2[i]);
+              // BODY
+              let body = response2[i].payload.parts[0].body.data;
+              let emailid = response2[i].id;
+              let subject = "";
+              let date = "";
+              let receiver = "";
+              let sender = "";
+              let labels = response2[i].labelIds.toString();
+              let threadid = response2[i].threadId;
+              for (j = 0; j < response2[i].payload.headers.length; j++) {
+                if(response2[i].payload.headers[j].name === "Subject") {
+                  subject = response2[i].payload.headers[j].value;
+                }
+                if(response2[i].payload.headers[j].name === "Date") {
+                  date = response2[i].payload.headers[j].value;
+                }
+                if(response2[i].payload.headers[j].name === "To") {
+                  receiver = response2[i].payload.headers[j].value;
+                }
+                if(response2[i].payload.headers[j].name === "From") {
+                  sender = response2[i].payload.headers[j].value;
+                }
+              }
+              let emailJson = createEmailJson(emailid, body, subject, date, receiver, sender, labels, threadid);
+              trashList.push(emailJson);
             }
-        ];
-        Promise.all(sendEmails(emailjsons)).then((response) => {
-            console.log(response);
-        }).catch((error) => {console.error(error)});
-
-
+            console.log(trashList[0]);
+            Promise.all(sendEmails(trashList)).then((response3) => {
+              console.log(response3);
+            }).catch((error) => {
+              console.log("sendemails error")
+              console.error(error.message)});
+          }).catch((error) => {console.error(error.message)});
+        }).catch((error) => {console.error(error.message)});
+     });
     }
+    
     // creates an email object
-    function createEmailJson(e, b, su, d, r, se, re){
+    function createEmailJson(e, b, su, d, r, se, l, t) {
       return {
       "emailuuid": e,
       "body": b,
       "subject": su,
       "date": d,
       "reciever": r,
-      "sender": se, 
-      "read": re,
+      "sender": se,
+      "labels": l,
+      "threadid": t
       };
     };
     // list takes in the full list of emails in the trash bin and returns a list of promises
@@ -189,3 +214,34 @@ var authToken = "";
     //     }).catch((error) => {console.error(error.message)});
     //   }).catch((error) => {console.error(error.message)});
     // });
+
+//   const testButtonFunction = () => {
+//     emailjsons = [
+//         {
+//             "emailuuid": "slfjkaklsdjfls",
+//             "body": "first body",
+//             "subject": "first subject",
+//             "date": "date",
+//             "reciever": "alexdong@gmail.com",
+//             "sender": "lucy@gmail.com", 
+//             "read": true
+//         },
+//         {
+//             "emailuuid": "sfdssjjjjjj",
+//             "body" : "second body",
+//             "subject": "second subject",
+//             "date": "date",
+//             "reciever": "alexdong@gmail.com",
+//             "sender": "lucy@gmail.com", 
+//             "read": false
+//         }
+//     ];
+//     Promise.all(sendEmails(emailjsons)).then((response) => {
+//         console.log(response);
+//     }).catch((error) => {console.error(error)});
+//     // chrome.identity.getAuthToken({interactive: true}, function(token) {
+//     //     console.log("token: " + token);
+
+//     //  });
+
+// }
