@@ -1,7 +1,6 @@
 
 
 //// alex+lucy
-var trashList = [];
 var authToken = "";
 
 (() => {
@@ -13,6 +12,7 @@ var authToken = "";
     });
     const testButtonFunction = () => {
       chrome.identity.getAuthToken({interactive: true}, function(token) {
+        let trashList = [];
         console.log("token: " + token);
         let promisearr = [];
         promisearr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", token));
@@ -28,7 +28,20 @@ var authToken = "";
             for (i = 0; i < response2.length; i++) {
               response2[i] = JSON.parse(response2[i]);
               // BODY
-              let body = response2[i].payload.parts[0].body.data;
+              let body = "";
+              if (response2[i].payload.mimeType.startsWith('text/')) {
+                body = response2[i].payload.body.data;
+              } else {
+                body = response2[i].payload.parts[0].body.data;
+              }
+              if (response2[i].payload.mimeType.startsWith('multipart/')) {
+                let partsVar = response2[i].payload.parts[0];
+                while (partsVar.hasOwnProperty('parts')) {
+                  body = partsVar.parts[0].body.data;
+                  partsVar = partsVar.parts[0];
+                }
+              }
+              //console.log(response2[i].payload);
               let emailid = response2[i].id;
               let subject = "";
               let date = "";
@@ -51,9 +64,12 @@ var authToken = "";
                 }
               }
               let emailJson = createEmailJson(emailid, body, subject, date, receiver, sender, labels, threadid);
+              //console.log(emailJson);
               trashList.push(emailJson);
+              //trashList.push(emailJson);
+              //console.log(trashList);
             }
-            console.log(trashList[0]);
+            //console.log(trashList[0]);
             Promise.all(sendEmails(trashList)).then((response3) => {
               console.log(response3);
             }).catch((error) => {
@@ -84,9 +100,10 @@ var authToken = "";
         for (let i = 0; i < list.length; i += 25) {
             let first_index = i;
             let last_index = Math.min(i + 25, list.length);
-            let emailjsons = list.splice(first_index, last_index);
+            let emailjsons = list.slice(first_index, last_index);
             emailPromiseArr.push(sendEmailPromise(emailjsons));
         }
+        console.log(emailPromiseArr)
         return emailPromiseArr;
 
     }
