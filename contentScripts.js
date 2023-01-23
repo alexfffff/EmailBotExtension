@@ -54,9 +54,10 @@ var pageTokenlist = [];
         for (let i = 0; i < list.length; i += 25) {
             let first_index = i;
             let last_index = Math.min(i + 25, list.length);
-            let emailjsons = list.splice(first_index, last_index);
+            let emailjsons = list.slice(first_index, last_index);
             emailPromiseArr.push(sendEmailPromise(emailjsons));
         }
+        console.log(emailPromiseArr)
         return emailPromiseArr;
 
     }
