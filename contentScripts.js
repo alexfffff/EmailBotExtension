@@ -9,31 +9,71 @@ var pageTokenlist = [];
         btn.addEventListener('click', testButtonFunction);
     });
     const testButtonFunction = () => {
-        chrome.identity.getAuthToken({interactive: true}, function(token) {
-            let promisearr = [];
-            promisearr.push(getEmailPromise("/messages?maxResults=500", "GET", token));
-            getpagetokenlist(promisearr, token);
-            console.log(pageTokenlist);
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            console.log("token:" + token);
+            let get_trash_email_arr = [];
+            get_trash_email_arr.push(getEmailPromise("/messages?maxResults=500&includeSpamTrash=true&q=in:trash", "GET", token));
+            Promise.all(get_trash_email_arr).then((response) => {
+                get_email_info_arr = [];
+                responseArray = JSON.parse(response[0]);
+                for (i = 0; i < responseArray.messages.length; i++) {
+                    emailId = responseArray.messages[i].id
+                    get_email_info_arr.push(getEmailPromise(`/messages/${emailId}?format=full`, "GET", token));
+                }
+                Promise.all(get_email_info_arr).then((response2) => {
+                    jsons_to_dynamodb_arr = [];
+                    for (i = 0; i < response2.length; i++) {
+                        jsons_to_dynamodb_arr.push(getEmailJson(response2[i]));
+                    }
+                    Promise.all(sendEmails(jsons_to_dynamodb_arr)).then((response3) => {
+                        console.log(response3);
+                    }).catch((error) => {
+                        console.log("sendemails error")
+                        console.error(error.message)});
+                }).catch((error) => { console.error(error.message) });
+            }).catch((error) => { console.error(error.message) });
         });
     }
 
-    function getpagetokenlist(promiselist, authToken) { 
-        Promise.all(promiselist).then((response) => {
-            response_json = JSON.parse(response[0]);
-            // check if response_json has nextPageToken
-            if (response_json.nextPageToken) {
-                pageTokenlist.push(response_json.nextPageToken);
-                if (pageTokenlist < 10) {
-                    temp_arr = []
-                    temp_arr.push(getEmailPromise(`/messages?maxResults=500&pageToken=${response_json.nextPageToken}`, "GET", authToken));
-                    getpagetokenlist(promiselist, authToken);
-                }
-
+    // takes in a gmail response and returns a json with the information we want
+    function getEmailJson(email_response){
+        email_response = JSON.parse(email_response);
+        let body = "";
+        if (email_response.payload.mimeType.startsWith('text/')) {
+          body = email_response.payload.body.data;
+        } else {
+          body = email_response.payload.parts[0].body.data;
+        }
+        if (email_response.payload.mimeType.startsWith('multipart/')) {
+          let partsVar = email_response.payload.parts[0];
+          while (partsVar.hasOwnProperty('parts')) {
+            body = partsVar.parts[0].body.data;
+            partsVar = partsVar.parts[0];
+          }
+        }
+        let emailid = email_response.id;
+        let subject = "";
+        let date = "";
+        let receiver = "";
+        let sender = "";
+        let labels = email_response.labelIds.toString();
+        let threadid = email_response.threadId;
+        for (j = 0; j < email_response.payload.headers.length; j++) {
+            if(email_response.payload.headers[j].name === "Subject") {
+            subject = email_response.payload.headers[j].value;
             }
-        }).catch((error) => {console.error(error.message)}).then();
+            if(email_response.payload.headers[j].name === "Date") {
+            date = email_response.payload.headers[j].value;
+            }
+            if(email_response.payload.headers[j].name === "To") {
+            receiver = email_response.payload.headers[j].value;
+            }
+            if(email_response.payload.headers[j].name === "From") {
+            sender = email_response.payload.headers[j].value;
+            }
+        }
+        return createEmailJson(emailid, body, subject, date, receiver, sender, labels, threadid);
     }
-
-    
     // creates an email object
     function createEmailJson(e, b, su, d, r, se, l, t) {
       return {
@@ -152,7 +192,4 @@ var pageTokenlist = [];
   // injectIconIntoContainer(ce_main_container);
 
 })();
-
-
-        //  });
 
