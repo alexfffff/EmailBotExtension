@@ -6,6 +6,9 @@ var labelId = "";
         var btn = document.getElementById("testButton");
         // function to run below
         btn.addEventListener("click", promiseWrapperTest);
+        chrome.identity.getAuthToken({interactive: true}, function(token) {
+          checkNomailLabel(token);
+        });
     });
     const promiseWrapperTest = () => {
       // let promiseArr = [];
