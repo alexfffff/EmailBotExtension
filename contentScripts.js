@@ -3,8 +3,39 @@
     document.addEventListener("DOMContentLoaded", function () {
         var btn = document.getElementById("testButton");
         // function to run below
-        btn.addEventListener("click", sendEmailToDynamodb);
+        btn.addEventListener("click", promiseWrapperTest);
     });
+
+    // returns the label id of the label with the specified name. 
+    function getLabelId(name) {
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            let promiseArr = [];
+            promiseArr.push(listLabelId(token));
+            let ret = ""
+            Promise.all(promiseArr).then((response) => {
+                let labelArr = JSON.parse(response[0])
+                for (i = 0; i < labelArr.labels.length; i++) {
+                    if (labelArr.labels[i].name === name) {
+                        return labelArr.labels[i].id;
+                    }
+                }
+            }).then((response) => {
+                console.log("getLabelID success");
+                console.log(response);
+            }).catch((error) => {
+                console.log("getLabelID error");
+                console.error(error.message);
+            });;
+        });
+    }
+    const promiseWrapperTest = () => {
+        // let promiseArr = [];
+        // promiseArr.push(testLabels());
+        // Promise.all(promiseArr).then((response) => {console.log(JSON.parse(response[0]))}
+        // ).catch((error) => {console.log(error.message)});
+        getLabelId("STARRED");
+    }
+    // 
     const sendEmailToDynamodb = () => {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
         console.log("token:" + token);
@@ -162,26 +193,55 @@
         Http.onerror = () => reject(Http.statusText);
         });
     }
-
-    function testLabels() {
+    // adds the label to the emailid 
+    function modifyLabelsPromise(emailid, labelid) {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            return new Promise((resolve, reject) => {
+                let Http = new XMLHttpRequest();
+                query = `/messages/${emailid}/modify`
+                const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
+                Http.open("POST", url);
+                Http.setRequestHeader("Content-Type", "application/json");
+                Http.setRequestHeader("Authorization", `Bearer ${token}`);
+                // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
+                // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
+                // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+                body = JSON.stringify({"addLabelIds": [labelid]});
+                Http.send(body);
+                Http.onreadystatechange = async (e) => {
+                    if (Http.readyState == 4 && Http.status == 200) {
+                        response = JSON.parse(Http.response);
+                        console.log(response);
+                    }
+                }
+            });
+        });
+    }
+    // restursn arr of label objects
+    function listLabelId(token) {
+        return new Promise((resolve, reject) => {
             let Http = new XMLHttpRequest();
-            query = "/messages/185c00c0bf580e9c/modify"
+            query = `/labels`
             const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
-            Http.open("POST", url);
+            Http.open("GET", url);
             Http.setRequestHeader("Content-Type", "application/json");
             Http.setRequestHeader("Authorization", `Bearer ${token}`);
             // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
             // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
             // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
-            body = JSON.stringify({"addLabelIds": ["Label_2"]});
-            Http.send(body);
-            Http.onreadystatechange = async (e) => {
+            Http.send();
+            Http.onload = async () => {
                 if (Http.readyState == 4 && Http.status == 200) {
-                    response = JSON.parse(Http.response);
-                    console.log(response);
+                    console.log(Http.response)
+                    // check if response is undefined
+                    resolve(Http.response);
+                        
+                } else {
+                    console.log("shouldn't see this")
+                    reject(Http.statusText);
                 }
-            }
+            };
+            Http.onerror = () => reject(Http.statusText);
         });
     }
 
