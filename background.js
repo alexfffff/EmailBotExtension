@@ -1,9 +1,9 @@
 let color = "#3aa757";
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ color });
-  console.log("Default background color set to %cgreen", `color: ${color}`);
-});
+// chrome.runtime.onInstalled.addListener(() => {
+//   chrome.storage.sync.set({ color });
+//   console.log("Default background color set to %cgreen", `color: ${color}`);
+// });
 
 // chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 //   if (tab.url && tab.url.includes("mail.google.com/mail/u")) {
@@ -80,12 +80,12 @@ chrome.runtime.onInstalled.addListener(() => {
 // });
 
 // chrome.tabs.onUpdated.addListener((tabId, tab) => {
-  //   if (tab.url && tab.url.includes("mail.google.com/mail/u")) {
-  //     chrome.identity.getAuthToken({interactive: true}, function(token) {
-  //       console.log(token)
-  //        chrome.tabs.sendMessage(tabId, {
-  //          token: token
-  //        });
-  //    });
-  //   }
-  // });
+//   if (tab.url && tab.url.includes("mail.google.com/mail/u")) {
+//     chrome.identity.getAuthToken({interactive: true}, function(token) {
+//       console.log(token)
+//        chrome.tabs.sendMessage(tabId, {
+//          token: token
+//        });
+//    });
+//   }
+// });
