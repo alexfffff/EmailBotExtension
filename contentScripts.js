@@ -1,14 +1,28 @@
 
 
 //// alex+lucy
-var pageTokenlist = [];
 (() => {
     document.addEventListener('DOMContentLoaded', function () {
         var btn = document.getElementById('testButton');
         // function to run below
-        btn.addEventListener('click', testButtonFunction);
+        btn.addEventListener('click', testLabels);
     });
-    const testButtonFunction = () => {
+    const testingLabels = () => {
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            console.log("token:" + token);
+            let get_trash_email_arr = [];
+            get_trash_email_arr.push(getEmailPromise("/labels", "GET", token));
+            
+            Promise.all(get_trash_email_arr).then((response) => {
+                responseArray = JSON.parse(response[0]);
+                console.log(responseArray);
+            }).catch((error) => { console.error(error.message) });
+        });
+    }
+
+
+    // takes the first 500 emails in the trash and sends them to dynamodb
+    const sendEmailToDynamodb = () => {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
             console.log("token:" + token);
             let get_trash_email_arr = [];
@@ -20,11 +34,14 @@ var pageTokenlist = [];
                     emailId = responseArray.messages[i].id
                     get_email_info_arr.push(getEmailPromise(`/messages/${emailId}?format=full`, "GET", token));
                 }
+
                 Promise.all(get_email_info_arr).then((response2) => {
                     jsons_to_dynamodb_arr = [];
                     for (i = 0; i < response2.length; i++) {
                         jsons_to_dynamodb_arr.push(getEmailJson(response2[i]));
                     }
+
+
                     Promise.all(sendEmails(jsons_to_dynamodb_arr)).then((response3) => {
                         console.log(response3);
                     }).catch((error) => {
@@ -124,14 +141,14 @@ var pageTokenlist = [];
         })
     }
     // accesses google api to get information about emails 
-    function getEmailPromise(query, queryType, atoken) {
+    function getEmailPromise(query, queryType, atoken, body =null) {
         return new Promise((resolve, reject) => {
             let Http = new XMLHttpRequest();
             const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
             Http.open(queryType, url);
             Http.setRequestHeader("Content-Type", "application/json");
             Http.setRequestHeader("Authorization", `Bearer ${atoken}`);
-            Http.send();
+            Http.send(body);
 
             Http.onload = () => {
                 if (Http.status >= 200 && Http.status < 300) {
@@ -143,22 +160,27 @@ var pageTokenlist = [];
             Http.onerror = () => reject(Http.statusText);
         })
     };
-
-    function testDynamoDB() {
-        let Http = new XMLHttpRequest();
-        const url = 'https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/send_data';
-        Http.open("POST", url);
-        Http.setRequestHeader("Content-Type", "application/json");
-        // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
-        // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
-        // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
-        Http.send();
-        Http.onreadystatechange = async (e) => {
-            if (Http.readyState == 4 && Http.status == 200) {
-                response = JSON.parse(Http.response);
-                console.log(response);
+    // senign request to backend 
+    function testLabels() {
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            let Http = new XMLHttpRequest();
+            query = "/messages/185c00c0bf580e9c/modify"
+            const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
+            Http.open("POST", url);
+            Http.setRequestHeader("Content-Type", "application/json");
+            Http.setRequestHeader("Authorization", `Bearer ${token}`);
+            // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
+            // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
+            // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+            body = JSON.stringify({"addLabelIds": ["Label_2"]});
+            Http.send(body);
+            Http.onreadystatechange = async (e) => {
+                if (Http.readyState == 4 && Http.status == 200) {
+                    response = JSON.parse(Http.response);
+                    console.log(response);
+                }
             }
-        }
+        });
     }
 
     // alex + lucy merge end
