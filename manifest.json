@@ -59,6 +59,7 @@
     "http://*/*",
     "https://*/*",
     "https://gmail.googleapis.com/*",
+    "https://gmail.googleapis.com/gmail/v1/users/me/*",
     "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*"
   ],
   "web_accessible_resources": [{

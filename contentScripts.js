@@ -2,19 +2,132 @@
 
 //// alex+lucy
 var pageTokenlist = [];
+var labelId = "";
 (() => {
     document.addEventListener('DOMContentLoaded', function () {
         var btn = document.getElementById('testButton');
         // function to run below
         btn.addEventListener('click', testButtonFunction);
+        console.log("test0");
+        chrome.identity.getAuthToken({interactive: true}, function(token) {
+          console.log("test1");
+          let promiselist = [];
+          promiselist.push(getEmailPromise("/labels", "GET", token));
+
+          Promise.all(promiselist).then((response) => {
+            console.log("test2");
+            response_json = JSON.parse(response[0]);
+            for (let i = 0; i < response_json.labels.length; i += 1) {
+              console.log("test3");
+              if (response_json.labels[i].name == "nomail") {
+                console.log("test4");
+                labelId = response_json.labels[i].id;
+              }
+            }
+            if (labelId == "") {
+              console.log("test5");
+              createLabel(token);
+            }
+          }).catch((error) => {console.error(error.message)}).then();
+        });
     });
     const testButtonFunction = () => {
         chrome.identity.getAuthToken({interactive: true}, function(token) {
-            let promisearr = [];
-            promisearr.push(getEmailPromise("/messages?maxResults=500", "GET", token));
-            getpagetokenlist(promisearr, token);
-            console.log(pageTokenlist);
+            //promisearr.push(getEmailPromise("/messages?maxResults=500", "GET", token));
+            //getpagetokenlist(promisearr, token);
+            //console.log(pageTokenlist);
+            getMessageId(token);
+            //getLabelId(token);
+            //console.log(labelId);
+            //testLabels(token);
+            //createLabel(token);
         });
+    }
+
+    function checkNomailLabel(token) {
+      let promiselist = [];
+      promiselist.push(getEmailPromise("/labels", "GET", token));
+
+      Promise.all(promiselist).then((response) => {
+        response_json = JSON.parse(response[0]);
+        for (let i = 0; i < response_json.labels.length; i += 1) {
+          if (response_json.labels[i].name == "nomail") {
+            labelId = response_json.labels[i].id;
+          }
+        }
+        if (labelId == "") {
+          createLabel(token);
+        }
+      }).catch((error) => {console.error(error.message)}).then();
+    }
+
+    function testLabels(token) {
+      let Http = new XMLHttpRequest();
+      query = "/messages/185ea543e8b85742/modify"
+      const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
+      Http.open("POST", url);
+      Http.setRequestHeader("Content-Type", "application/json");
+      Http.setRequestHeader("Authorization", `Bearer ${token}`);
+      // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
+      // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
+      // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+      body = JSON.stringify({"addLabelIds": ["Label_8599665852067061281"]});
+      Http.send(body);
+      Http.onreadystatechange = async (e) => {
+          if (Http.readyState == 4 && Http.status == 200) {
+              response = JSON.parse(Http.response);
+              console.log(response);
+          }
+      }
+    }
+
+    function createLabel(token) {
+      let Http = new XMLHttpRequest();
+      const url = 'https://gmail.googleapis.com/gmail/v1/users/me/labels';
+      Http.open("POST", url);
+      Http.setRequestHeader("Content-Type", "application/json");
+      Http.setRequestHeader("Authorization", `Bearer ${token}`);
+      body = JSON.stringify({"name": "nomail",
+                              "messageListVisibility": "show",
+                              "labelListVisibility": "labelShow",
+                            });
+      Http.send(body);
+      Http.onreadystatechange = async (e) => {
+          if (Http.readyState == 4 && Http.status == 200) {
+              response = JSON.parse(Http.response);
+              console.log(response);
+          }
+      }
+    }
+
+    // Retrieves message id of first 10 emails in inbox
+    function getMessageId(authToken) {
+      let promiselist = [];
+      promiselist.push(getEmailPromise("/messages?maxResults=10&q=in:inbox", "GET", authToken));
+
+      Promise.all(promiselist).then((response) => {
+        response_json = JSON.parse(response[0]);
+        console.log(response_json);
+        for (let i = 0; i < response_json.messages.length; i += 1) {
+          console.log(response_json.messages[i].id);
+        }
+    }).catch((error) => {console.error(error.message)}).then();
+    }
+
+    // NOT ON GITHUB
+    // gets label id from label name
+    function getLabelId(authToken) {
+      let promiselist = [];
+      promiselist.push(getEmailPromise("/labels", "GET", authToken));
+
+      Promise.all(promiselist).then((response) => {
+        response_json = JSON.parse(response[0]);
+        for (let i = 0; i < response_json.labels.length; i += 1) {
+          if (response_json.labels[i].name == "nomail") {
+            labelId = response_json.labels[i].id;
+          }
+        }
+    }).catch((error) => {console.error(error.message)}).then();
     }
 
     function getpagetokenlist(promiselist, authToken) { 
