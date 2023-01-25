@@ -1,0 +1,9 @@
+- add button to mark as mailtrack keep 
+
+- create function to create new label (lucy )
+
+- idk egret frontend 
+
+completed 
+- check if labels work in promises 
+- create functions to add label to email 
