@@ -13,7 +13,7 @@ var labelId = "";
       // Promise.all(promiseArr).then((response) => {console.log(JSON.parse(response[0]))}
       // ).catch((error) => {console.log(error.message)});
       getLabelId("STARRED");
-  }
+    }
     const testButtonFunction = () => {
         chrome.identity.getAuthToken({interactive: true}, function(token) {
             //promisearr.push(getEmailPromise("/messages?maxResults=500", "GET", token));
@@ -127,7 +127,7 @@ var labelId = "";
 
             }
         }).catch((error) => {console.error(error.message)}).then();
-
+    }
     // returns the label id of the label with the specified name. 
     function getLabelId(name) {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
@@ -388,5 +388,4 @@ var labelId = "";
         }
     };
     // injectIconIntoContainer(ce_main_container);
-  }
 })();
