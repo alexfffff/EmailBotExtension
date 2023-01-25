@@ -8,28 +8,6 @@ var labelId = "";
         var btn = document.getElementById('testButton');
         // function to run below
         btn.addEventListener('click', testButtonFunction);
-        console.log("test0");
-        chrome.identity.getAuthToken({interactive: true}, function(token) {
-          console.log("test1");
-          let promiselist = [];
-          promiselist.push(getEmailPromise("/labels", "GET", token));
-
-          Promise.all(promiselist).then((response) => {
-            console.log("test2");
-            response_json = JSON.parse(response[0]);
-            for (let i = 0; i < response_json.labels.length; i += 1) {
-              console.log("test3");
-              if (response_json.labels[i].name == "nomail") {
-                console.log("test4");
-                labelId = response_json.labels[i].id;
-              }
-            }
-            if (labelId == "") {
-              console.log("test5");
-              createLabel(token);
-            }
-          }).catch((error) => {console.error(error.message)}).then();
-        });
     });
     const testButtonFunction = () => {
         chrome.identity.getAuthToken({interactive: true}, function(token) {
@@ -44,6 +22,7 @@ var labelId = "";
         });
     }
 
+    // checks if nomail label exists. if not, adds label
     function checkNomailLabel(token) {
       let promiselist = [];
       promiselist.push(getEmailPromise("/labels", "GET", token));
@@ -114,7 +93,6 @@ var labelId = "";
     }).catch((error) => {console.error(error.message)}).then();
     }
 
-    // NOT ON GITHUB
     // gets label id from label name
     function getLabelId(authToken) {
       let promiselist = [];
