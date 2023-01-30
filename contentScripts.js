@@ -37,7 +37,6 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
         Promise.all(promiselist).then((response) => {
             response_json = JSON.parse(response[0]);
             for (let i = 0; i < response_json.labels.length; i += 1) {
-                console.log(response_json.labels[i].name)
                 if (nomailLabels.includes(response_json.labels[i].name)) {
                     nomailDict[response_json.labels[i].name] = response_json.labels[i].id;
                 }
