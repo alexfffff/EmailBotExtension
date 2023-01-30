@@ -1,6 +1,7 @@
 //// alex+lucy
 var pageTokenlist = [];
-var labelId = "";
+var labelIdKeep = ""; // formerly labelId
+var labelIdDelete = "";
 (() => {
     document.addEventListener("DOMContentLoaded", function () {
         var btn = document.getElementById("testButton");
@@ -38,12 +39,18 @@ var labelId = "";
       Promise.all(promiselist).then((response) => {
         response_json = JSON.parse(response[0]);
         for (let i = 0; i < response_json.labels.length; i += 1) {
-          if (response_json.labels[i].name == "nomail") {
-            labelId = response_json.labels[i].id;
+          if (response_json.labels[i].name == "nomail keep") {
+            labelIdKeep = response_json.labels[i].id;
+          }
+          if (response_json.labels[i].name == "nomail delete") {
+            labelIdDelete = response_json.labels[i].id;
           }
         }
-        if (labelId == "") {
-          createLabel(token);
+        if (labelIdKeep == "") {
+          createLabel(token, "nomail keep");
+        }
+        if (labelIdDelete == "") {
+          createLabel(token, "nomail delete");
         }
       }).catch((error) => {console.error(error.message)}).then();
     }
@@ -55,9 +62,6 @@ var labelId = "";
       Http.open("POST", url);
       Http.setRequestHeader("Content-Type", "application/json");
       Http.setRequestHeader("Authorization", `Bearer ${token}`);
-      // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
-      // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
-      // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
       body = JSON.stringify({"addLabelIds": ["Label_8599665852067061281"]});
       Http.send(body);
       Http.onreadystatechange = async (e) => {
@@ -68,13 +72,13 @@ var labelId = "";
       }
     }
 
-    function createLabel(token) {
+    function createLabel(token, name) {
       let Http = new XMLHttpRequest();
       const url = 'https://gmail.googleapis.com/gmail/v1/users/me/labels';
       Http.open("POST", url);
       Http.setRequestHeader("Content-Type", "application/json");
       Http.setRequestHeader("Authorization", `Bearer ${token}`);
-      body = JSON.stringify({"name": "nomail",
+      body = JSON.stringify({"name": name,
                               "messageListVisibility": "show",
                               "labelListVisibility": "labelShow",
                             });
