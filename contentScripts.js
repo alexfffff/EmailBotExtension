@@ -1,12 +1,13 @@
 //// alex+lucy
 var pageTokenlist = [];
-var labelId = "";
+var nomailDict = {};
+var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
 (() => {
     document.addEventListener("DOMContentLoaded", function () {
         var btn = document.getElementById("testButton");
         // function to run below
-        // btn.addEventListener("click", sendEmailToDynamodb);
-        btn.addEventListener("click", promiseWrapperTest);
+        btn.addEventListener("click", sendEmailToDynamodb);
+        // btn.addEventListener("click", promiseWrapperTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
@@ -24,7 +25,6 @@ var labelId = "";
             //getLabelId(token);
             //console.log(labelId);
             //testLabels(token);
-            //createLabel(token);
         });
     }
 
@@ -32,18 +32,23 @@ var labelId = "";
     function checkNomailLabel(token) {
       let promiselist = [];
       promiselist.push(getEmailPromise("/labels", "GET", token));
-
-      Promise.all(promiselist).then((response) => {
-        response_json = JSON.parse(response[0]);
-        for (let i = 0; i < response_json.labels.length; i += 1) {
-          if (response_json.labels[i].name == "nomail") {
-            labelId = response_json.labels[i].id;
-          }
-        }
-        if (labelId == "") {
-          createLabel(token);
-        }
-      }).catch((error) => {console.error(error.message)}).then();
+      if (nomailDict.length != nomailLabels.length) {
+        Promise.all(promiselist).then((response) => {
+            response_json = JSON.parse(response[0]);
+            for (let i = 0; i < response_json.labels.length; i += 1) {
+                if (response_json.labels[i].name in nomailLabels) {
+                    nomailDict[response_json.labels[i].name] = response_json.labels[i].id;
+                }
+            }
+            for (let i = 0; i < nomailLabels.length; i += 1) {
+                if (nomailLabels[i] in nomailDict) {
+                    continue;
+                } else {
+                    createLabel(token, nomailLabels[i]);
+                }
+            }
+        }).catch((error) => {console.error(error.message)}).then();
+      }
     }
 
     function testLabels(token) {
@@ -66,13 +71,13 @@ var labelId = "";
       }
     }
 
-    function createLabel(token) {
+    function createLabel(token, labelName) {
       let Http = new XMLHttpRequest();
       const url = 'https://gmail.googleapis.com/gmail/v1/users/me/labels';
       Http.open("POST", url);
       Http.setRequestHeader("Content-Type", "application/json");
       Http.setRequestHeader("Authorization", `Bearer ${token}`);
-      body = JSON.stringify({"name": "nomail",
+      body = JSON.stringify({"name": labelName,
                               "messageListVisibility": "show",
                               "labelListVisibility": "labelShow",
                             });
@@ -120,7 +125,6 @@ var labelId = "";
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
             let promiseArr = [];
             promiseArr.push(listLabelId(token));
-            let ret = ""
             Promise.all(promiseArr).then((response) => {
                 let labelArr = JSON.parse(response[0])
                 for (i = 0; i < labelArr.labels.length; i++) {
@@ -145,44 +149,59 @@ var labelId = "";
     // main function loop that sends emails to dynamodb
     const sendEmailToDynamodb = () => {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
-        console.log("token:" + token);
-        let get_trash_email_arr = [];
-
-        
-        get_trash_email_arr.push(
-            getEmailPromise(
-            "/messages?maxResults=500&includeSpamTrash=true&q=in:trash",
-            "GET",
-            token
-            )
-        );
-        Promise.all(get_trash_email_arr)
-            .then((response) => {
-            get_email_info_arr = [];
-            responseArray = JSON.parse(response[0]);
-            for (i = 0; i < responseArray.messages.length; i++) {
-                emailId = responseArray.messages[i].id;
-                console.log(responseArray.messages[i])
-                get_email_info_arr.push(
-                getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
-                );
-            }
-            return Promise.all(get_email_info_arr);
-            })
-            .then((response2) => {
-            jsons_to_dynamodb_arr = [];
-            for (i = 0; i < response2.length; i++) {
-                jsons_to_dynamodb_arr.push(getEmailJson(response2[i]));
-            }
-            return Promise.all(sendEmails(jsons_to_dynamodb_arr));
-            })
-            .then((response3) => {
-            console.log(response3);
-            })
-            .catch((error) => {
-            console.log("sendemails error");
-            console.error(error.message);
-            });
+            console.log("token:" + token);
+            let get_label_id_arr = [];
+            get_label_id_arr.push(listLabelId(token));
+            nomailDict = {};
+            Promise.all(get_label_id_arr).then((response) => {
+                    let labelArr = JSON.parse(response[0])
+                    for (i = 0; i < labelArr.labels.length; i++) {
+                        if (labelArr.labels[i].name in nomailLabels) {
+                            nomailDict[labelArr.labels[i].name] = labelArr.labels[i].id;
+                        }
+                    }
+                    console.log(nomailDict)
+                    if (nomailDict.length == 3) {
+                        return nomailDict;
+                    } else {
+                        throw new Error("Label not found")
+                    };
+                }).then((response) => {
+                    let get_trash_email_arr = [];
+                    get_trash_email_arr.push(
+                        getEmailPromise(
+                        "/messages?maxResults=500&includeSpamTrash=true&q=in:trash",
+                        "GET",
+                        token
+                        )
+                    );
+                    return Promise.all(get_trash_email_arr);
+                }).then((response) => {
+                    get_email_info_arr = [];
+                    responseArray = JSON.parse(response[0]);
+                    for (i = 0; i < responseArray.messages.length; i++) {
+                        emailId = responseArray.messages[i].id;
+                        console.log(responseArray.messages[i])
+                        get_email_info_arr.push(
+                        getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
+                        );
+                    }
+                    return Promise.all(get_email_info_arr);
+                })
+                .then((response2) => {
+                    jsons_to_dynamodb_arr = [];
+                    for (i = 0; i < response2.length; i++) {
+                        jsons_to_dynamodb_arr.push(getEmailJson(response2[i]));
+                    }
+                    return Promise.all(sendEmails(jsons_to_dynamodb_arr));
+                })
+                .then((response3) => {
+                    console.log(response3);
+                })
+                .catch((error) => {
+                    console.log("sendemails error");
+                    console.error(error.message);
+                });
         });
     };
 
