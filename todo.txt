@@ -1,9 +1,9 @@
 - add button to mark as mailtrack keep 
-
-- create function to create new label (lucy )
+- create 3 labels nomail_keep_unsent, nomail_trash, nomail_keep_sent
 
 - idk egret frontend 
 
 completed 
 - check if labels work in promises 
 - create functions to add label to email 
+- create function to create new label (lucy )
