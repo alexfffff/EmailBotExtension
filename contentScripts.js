@@ -33,7 +33,7 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
     function checkNomailLabel(token) {
       let promiselist = [];
       promiselist.push(getEmailPromise("/labels", "GET", token));
-      if (nomailDict.length != nomailLabels.length) {
+      if (Object.keys(nomailDict).length != nomailLabels.length) {
         Promise.all(promiselist).then((response) => {
             response_json = JSON.parse(response[0]);
             for (let i = 0; i < response_json.labels.length; i += 1) {
@@ -155,34 +155,55 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
             get_label_id_arr.push(listLabelId(token));
             nomailDict = {};
             Promise.all(get_label_id_arr).then((response) => {
+                    if (Object.keys(nomailDict).length == nomailLabels.length) {
+                        return nomailDict;
+                    } 
                     let labelArr = JSON.parse(response[0])
                     for (i = 0; i < labelArr.labels.length; i++) {
                         if (nomailLabels.includes(labelArr.labels[i].name)) {
                             nomailDict[labelArr.labels[i].name] = labelArr.labels[i].id;
                         }
                     }
-                    console.log(nomailDict)
-                    if (nomailDict.length == 3) {
+                    if (Object.keys(nomailDict).length == nomailLabels.length) {
                         return nomailDict;
                     } else {
                         throw new Error("Label not found")
                     };
                 }).then((response) => {
-                    let get_trash_email_arr = [];
-                    get_trash_email_arr.push(
+                    let get_email_arr = [];
+                    get_email_arr.push(
                         getEmailPromise(
-                        "/messages?maxResults=500&includeSpamTrash=true&q=in:trash",
+                        `/messages?maxResults=500&includeSpamTrash=true&q=in:inbox&labelIds=${nomailDict["nomail_keep"]}`,
                         "GET",
                         token
                         )
                     );
-                    return Promise.all(get_trash_email_arr);
+                    get_email_arr.push(
+                        getEmailPromise(
+                            `/messages?maxResults=500&includeSpamTrash=true&q=in:trash has:nouserlabels`,
+                            "GET",
+                            token
+                        )
+                    );
+                    return Promise.all(get_email_arr);
                 }).then((response) => {
                     get_email_info_arr = [];
-                    responseArray = JSON.parse(response[0]);
-                    for (i = 0; i < responseArray.messages.length; i++) {
-                        emailId = responseArray.messages[i].id;
-                        console.log(responseArray.messages[i])
+                    keepResponseArray = JSON.parse(response[0]);
+                    console.log("keeparr:",keepResponseArray);
+                    // for (i = 0; i < keepResponseArray.messages.length; i++) {
+                    //     console.log("keep",keepResponseArray.messages[i])
+                    //     emailId = keepResponseArray.messages[i].id;
+                    //     modifyLabels(emailId,[nomailDict["nomail_keep_sent"]], [nomailDict["nomail_keep"]]);
+                    //     get_email_info_arr.push(
+                    //     getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
+                    //     );
+                    // }
+                    deleteResponseArray = JSON.parse(response[1]);
+                    console.log("deletearr:",deleteResponseArray)
+                    for (i = 0; i < deleteResponseArray.messages.length; i++) {
+                        console.log("delete",deleteResponseArray.messages[i])
+                        emailId = deleteResponseArray.messages[i].id;
+                        modifyLabels(emailId,[nomailDict["nomail_delete"]], [])
                         get_email_info_arr.push(
                         getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
                         );
@@ -333,9 +354,12 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
                 Http.open("POST", url);
                 Http.setRequestHeader("Content-Type", "application/json");
                 Http.setRequestHeader("Authorization", `Bearer ${token}`);
-                // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
-                // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
-                // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+                if (addedLabelIdArr.length == 0) {
+                    addedLabelIdArr = null;
+                }
+                if (removedLabelIdArr.length == 0) {
+                    removedLabelIdArr = null;
+                }
                 body = JSON.stringify({"addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr});
                 Http.send(body);
                 Http.onreadystatechange = async (e) => {
@@ -345,6 +369,29 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
                     }
                 }
             });
+        });
+    }
+
+    function modifyLabels(emailid, addedLabelIdArr, removedLabelIdArr) {
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            let Http = new XMLHttpRequest();
+            query = `/messages/${emailid}/modify`
+            const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
+            Http.open("POST", url);
+            Http.setRequestHeader("Content-Type", "application/json");
+            Http.setRequestHeader("Authorization", `Bearer ${token}`);
+            if (removedLabelIdArr.length == 0) {
+                body = JSON.stringify({"addLabelIds": addedLabelIdArr});
+            } else {
+                body = JSON.stringify({"addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr});
+            }
+            Http.send(body);
+            Http.onreadystatechange = async (e) => {
+                if (Http.readyState == 4 && Http.status == 200) {
+                    response = JSON.parse(Http.response);
+                    console.log(response);
+                }
+            }
         });
     }
     // restursn arr of label objects
@@ -362,7 +409,6 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
             Http.send();
             Http.onload = async () => {
                 if (Http.readyState == 4 && Http.status == 200) {
-                    console.log(Http.response)
                     // check if response is undefined
                     resolve(Http.response);
                         
