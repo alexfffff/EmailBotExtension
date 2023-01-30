@@ -11,6 +11,7 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
+        console.log(nomailDict);
     });
     const promiseWrapperTest = () => {
         // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
@@ -36,7 +37,8 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
         Promise.all(promiselist).then((response) => {
             response_json = JSON.parse(response[0]);
             for (let i = 0; i < response_json.labels.length; i += 1) {
-                if (response_json.labels[i].name in nomailLabels) {
+                console.log(response_json.labels[i].name)
+                if (nomailLabels.includes(response_json.labels[i].name)) {
                     nomailDict[response_json.labels[i].name] = response_json.labels[i].id;
                 }
             }
@@ -156,7 +158,7 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
             Promise.all(get_label_id_arr).then((response) => {
                     let labelArr = JSON.parse(response[0])
                     for (i = 0; i < labelArr.labels.length; i++) {
-                        if (labelArr.labels[i].name in nomailLabels) {
+                        if (nomailLabels.includes(labelArr.labels[i].name)) {
                             nomailDict[labelArr.labels[i].name] = labelArr.labels[i].id;
                         }
                     }
