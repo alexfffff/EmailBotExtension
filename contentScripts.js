@@ -6,17 +6,15 @@ var labelIdDelete = "";
     document.addEventListener("DOMContentLoaded", function () {
         var btn = document.getElementById("testButton");
         // function to run below
+        // btn.addEventListener("click", sendEmailToDynamodb);
         btn.addEventListener("click", promiseWrapperTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
     });
     const promiseWrapperTest = () => {
-      // let promiseArr = [];
-      // promiseArr.push(testLabels());
-      // Promise.all(promiseArr).then((response) => {console.log(JSON.parse(response[0]))}
-      // ).catch((error) => {console.log(error.message)});
-      getLabelId("STARRED");
+        // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
+        getLabelId("nomail");
     }
     const testButtonFunction = () => {
         chrome.identity.getAuthToken({interactive: true}, function(token) {
@@ -105,20 +103,6 @@ var labelIdDelete = "";
     }).catch((error) => {console.error(error.message)}).then();
     }
 
-    // gets label id from label name
-    function getLabelId(authToken) {
-      let promiselist = [];
-      promiselist.push(getEmailPromise("/labels", "GET", authToken));
-
-      Promise.all(promiselist).then((response) => {
-        response_json = JSON.parse(response[0]);
-        for (let i = 0; i < response_json.labels.length; i += 1) {
-          if (response_json.labels[i].name == "nomail") {
-            labelId = response_json.labels[i].id;
-          }
-        }
-    }).catch((error) => {console.error(error.message)}).then();
-    }
 
     function getpagetokenlist(promiselist, authToken) { 
         Promise.all(promiselist).then((response) => {
@@ -148,9 +132,13 @@ var labelIdDelete = "";
                         return labelArr.labels[i].id;
                     }
                 }
+                throw new Error("Label not found");
             }).then((response) => {
+
+
                 console.log("getLabelID success");
                 console.log(response);
+                return response;
             }).catch((error) => {
                 console.log("getLabelID error");
                 console.error(error.message);
@@ -158,11 +146,13 @@ var labelIdDelete = "";
         });
     }
 
-    // 
+    // main function loop that sends emails to dynamodb
     const sendEmailToDynamodb = () => {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
         console.log("token:" + token);
         let get_trash_email_arr = [];
+
+        
         get_trash_email_arr.push(
             getEmailPromise(
             "/messages?maxResults=500&includeSpamTrash=true&q=in:trash",
@@ -176,6 +166,7 @@ var labelIdDelete = "";
             responseArray = JSON.parse(response[0]);
             for (i = 0; i < responseArray.messages.length; i++) {
                 emailId = responseArray.messages[i].id;
+                console.log(responseArray.messages[i])
                 get_email_info_arr.push(
                 getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
                 );
@@ -317,7 +308,7 @@ var labelIdDelete = "";
         });
     }
     // adds the label to the emailid 
-    function modifyLabelsPromise(emailid, labelid) {
+    function modifyLabelsPromise(emailid, addedLabelIdArr, removedLabelIdArr) {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
             return new Promise((resolve, reject) => {
                 let Http = new XMLHttpRequest();
@@ -329,7 +320,7 @@ var labelIdDelete = "";
                 // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
                 // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
                 // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
-                body = JSON.stringify({"addLabelIds": [labelid]});
+                body = JSON.stringify({"addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr});
                 Http.send(body);
                 Http.onreadystatechange = async (e) => {
                     if (Http.readyState == 4 && Http.status == 200) {
