@@ -2,17 +2,36 @@
 var pageTokenlist = [];
 var nomailDict = {};
 var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
+var prevtime = 0;
+var currtime = 0;
+var finishedWhile = 0;
 (() => {
     document.addEventListener("DOMContentLoaded", function () {
         var btn = document.getElementById("testButton");
         // function to run below
-        btn.addEventListener("click", sendEmailToDynamodb);
-        // btn.addEventListener("click", promiseWrapperTest);
+        // btn.addEventListener("click", sendEmailToDynamodb);
+        btn.addEventListener("click", buttonWrapper);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
         console.log(nomailDict);
     });
+    const buttonWrapper = async () => {
+        prevtime = Date.now();
+        currtime = Date.now();
+        while (finishedWhile != -1 ) {
+            sendEmailToDynamodb()
+            while (currtime >= prevtime){
+                console.log("in while loop");
+                await new Promise(r => setTimeout(r, 3000));
+            }
+            await new Promise(r => setTimeout(r, 5000));
+            let temp = currtime;
+            currtime = prevtime;
+            prevtime = temp;
+        }
+        console.log("finished buttonWrapper");
+    }
     const promiseWrapperTest = () => {
         // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
         getLabelId("nomail");
@@ -150,7 +169,6 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
     // main function loop that sends emails to dynamodb
     const sendEmailToDynamodb = () => {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
-            console.log("token:" + token);
             let get_label_id_arr = [];
             get_label_id_arr.push(listLabelId(token));
             nomailDict = {};
@@ -189,9 +207,22 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
                 }).then((response) => {
                     get_email_info_arr = [];
                     keepResponseArray = JSON.parse(response[0]);
-                    console.log("keeparr:",keepResponseArray);
+                    deleteResponseArray = JSON.parse(response[1]);
+                    let keepLength = 0;
+                    let deleteLength = 0; 
+                    if (keepResponseArray.messages) {
+                        keepLength = keepResponseArray.messages.length;
+                    }
+                    if (deleteResponseArray.messages) {
+                        deleteLength = deleteResponseArray.messages.length;
+                    }
+                    console.log(" number of emails remaining", keepLength + deleteLength);
+                    if ((keepLength + deleteLength) < 25) {
+                        console.log("finished this round");
+                        finishedWhile = -1;
+                    } 
                     if (keepResponseArray.messages){
-                        for (i = 0; i < keepResponseArray.messages.length; i++) {
+                        for (i = 0; i < Math.min(25,keepLength); i++) {
                             emailId = keepResponseArray.messages[i].id;
                             modifyLabels(emailId,[nomailDict["nomail_keep_sent"]], [nomailDict["nomail_keep"]]);
                             get_email_info_arr.push(
@@ -199,11 +230,8 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
                             );
                         }
                     }   
-
-                    deleteResponseArray = JSON.parse(response[1]);
-                    console.log("deletearr:",deleteResponseArray);
                     if (deleteResponseArray.messages) {
-                        for (i = 0; i < deleteResponseArray.messages.length; i++) {
+                        for (i = 0; i < Math.min(25,deleteLength); i++) {
                             emailId = deleteResponseArray.messages[i].id;
                             modifyLabels(emailId,[nomailDict["nomail_delete"]], [])
                             get_email_info_arr.push(
@@ -211,7 +239,7 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
                             );
                         }
                     }
-
+                    console.log("get_email_info_arr:",get_email_info_arr.length)
                     return Promise.all(get_email_info_arr);
                 })
                 .then((response2) => {
@@ -222,9 +250,11 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
                     return Promise.all(sendEmails(jsons_to_dynamodb_arr));
                 })
                 .then((response3) => {
+                    prevtime = Date.now();
                     console.log(response3);
                 })
                 .catch((error) => {
+                    currtime = -1;
                     console.log("sendemails error");
                     console.error(error.message);
                 });
@@ -302,7 +332,6 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
         let emailjsons = list.slice(first_index, last_index);
         emailPromiseArr.push(sendEmailPromise(emailjsons));
         }
-        console.log(emailPromiseArr);
         return emailPromiseArr;
     }
     // creates a promise with max 25 emails and returns it
