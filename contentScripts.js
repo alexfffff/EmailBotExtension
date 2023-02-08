@@ -10,13 +10,17 @@ var finishedWhile = 0;
         var btn = document.getElementById("testButton");
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
-        btn.addEventListener("click", buttonWrapper);
+        // btn.addEventListener("click", buttonSendData);
+        btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
         console.log(nomailDict);
     });
-    const buttonWrapper = async () => {
+
+
+
+    const buttonSendData = async () => {
         prevtime = Date.now();
         currtime = Date.now();
         while (finishedWhile != -1 ) {
@@ -32,9 +36,14 @@ var finishedWhile = 0;
         }
         console.log("finished buttonWrapper");
     }
-    const promiseWrapperTest = () => {
-        // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
-        getLabelId("nomail");
+    const messageTest = async () => {
+        chrome.identity.getAuthToken({ interactive: true }, async function (token) {
+            // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
+            const response = await chrome.runtime.sendMessage({greeting: "hello"});
+            // do something with response here, not outside the function
+            console.log(response);
+        });
+
     }
     const testButtonFunction = () => {
         chrome.identity.getAuthToken({interactive: true}, function(token) {
