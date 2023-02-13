@@ -10,12 +10,11 @@ var finishedWhile = 0;
         var btn = document.getElementById("testButton");
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
-        // btn.addEventListener("click", buttonSendData);
-        btn.addEventListener("click", messageTest);
+        btn.addEventListener("click", buttonSendData);
+        // btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
-        console.log(nomailDict);
     });
 
 
@@ -35,6 +34,7 @@ var finishedWhile = 0;
             prevtime = temp;
         }
         console.log("finished buttonWrapper");
+        finishedWhile = 0;
     }
     const messageTest = async () => {
         chrome.identity.getAuthToken({ interactive: true }, async function (token) {
