@@ -20,6 +20,17 @@ var finishedWhile = 0;
 
 
     const buttonSendData = async () => {
+        const headerElement = document.getElementsByClassName('header')[0];
+        if (document.getElementById('loading') == null) {
+            const loadingDiv = document.createElement("div");
+            loadingDiv.id = 'loading';
+            loadingDiv.textContent = 'Loading...';
+            headerElement.appendChild(loadingDiv);
+        } else {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.textContent = 'Loading...';
+        }
+
         prevtime = Date.now();
         currtime = Date.now();
         while (finishedWhile != -1 ) {
@@ -33,6 +44,7 @@ var finishedWhile = 0;
             currtime = prevtime;
             prevtime = temp;
         }
+        document.getElementById('loading').textContent = 'Finished'
         console.log("finished buttonWrapper");
         finishedWhile = 0;
     }
@@ -226,6 +238,8 @@ var finishedWhile = 0;
                         deleteLength = deleteResponseArray.messages.length;
                     }
                     console.log(" number of emails remaining", keepLength + deleteLength);
+                    const loadingDiv = document.getElementById('loading');
+                    loadingDiv.textContent = `Loading...${keepLength + deleteLength} emails`;
                     if ((keepLength + deleteLength) < 25) {
                         console.log("finished this round");
                         finishedWhile = -1;

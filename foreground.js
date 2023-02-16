@@ -65,7 +65,6 @@ const injectIconIntoContainer = (icon) => {
   let iconContainer = document.getElementsByClassName("G-Ni G-aE J-J5-Ji")[1];
 
   if (iconContainer !== undefined && iconContainer != null) {
-    console.log("hi");
     iconContainer.appendChild(ce_main_container);
   } else {
     setTimeout(() => injectIconIntoContainer(icon), 200);
