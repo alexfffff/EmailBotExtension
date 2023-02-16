@@ -7,9 +7,13 @@ var currtime = 0;
 var finishedWhile = 0;
 (() => {
     document.addEventListener("DOMContentLoaded", function () {
+        console.log("first thing");
         var btn = document.getElementById("testButton");
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
+        console.log("content scripts 1");
+        messageTest();
+        console.log("content scripts 2");
         btn.addEventListener("click", buttonSendData);
         // btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
@@ -37,12 +41,14 @@ var finishedWhile = 0;
         finishedWhile = 0;
     }
     const messageTest = async () => {
-        chrome.identity.getAuthToken({ interactive: true }, async function (token) {
+        //chrome.identity.getAuthToken({ interactive: true }, async function (token) {
             // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
+            console.log("message is sending 1");
             const response = await chrome.runtime.sendMessage({greeting: "hello"});
+            console.log("message is sending 2");
             // do something with response here, not outside the function
             console.log(response);
-        });
+        //});
 
     }
     const testButtonFunction = () => {
