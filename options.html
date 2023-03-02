@@ -15,15 +15,25 @@
         <div class="content">
             <div class="threshold-container">
                 <h2>threshold</h2>
-                <h3>lower limit</h3>
-                <h3>upper limit</h3>
+                <h3>lower limit 
+                    <span class="custom-select" style="width:150px;">
+                    <input type="number" min="30" max="90" step="2" value="50">
+                </span>
+            </h3>
+                <h3>upper limit
+                    <span class="custom-select">
+                    <input type="number" min="30" max="90" step="2" value="50">
+                    </span>
+                </h3>
             </div>
             <div class="auto-delete-container">
                 <h2>toggle auto delete</h2>
-                <form>
-                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                    <label for="vehicle1">move spam mail straight to trash without review</label>
-                </form>
+                <h3>
+                <label class="container">move spam mail straight to trash without review
+                    <input type="checkbox" checked="checked">
+                    <span class="checkmark"></span>
+                  </label>
+                </h3>
             </div>
             <div class="default-label-container">
                 <h2>change default nomail inbox</h2>
@@ -42,21 +52,21 @@
     </div>
     <div class="metrics-container">
         <div class="graph-container">
-            view from ___ to ____
+            <h2>view from ___ to ____</h2>
             <div class="graph"></div>
         </div>
 
         <div class="numbers-container">
             <h2>Metrics</h2>
-            <div class="metric-row">
+            <h3 class="metric-row">
                 total emails deleted
-            </div>
-            <div class="metric-row">
+            </h3>
+            <h3 class="metric-row">
                 total spam identified
-            </div>
-            <div class="metric-row">
+            </h3>
+            <h3 class="metric-row">
                 false detected emails
-            </div>
+            </h3>
         </div>
     </div>
 
