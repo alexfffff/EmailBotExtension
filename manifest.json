@@ -20,7 +20,7 @@
         "http://www.mail.google.com/u/*",
         "https://mail.google.com/mail/u/*"
       ],
-      "js": ["contentScripts.js"],
+      "js": ["contentScripts.js", "foreground.js"],
       "run_at": "document_start"
     }
   ],
