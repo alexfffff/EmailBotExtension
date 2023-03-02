@@ -20,7 +20,7 @@
         "http://www.mail.google.com/u/*",
         "https://mail.google.com/mail/u/*"
       ],
-      "js": ["contentScripts.js"],
+      "js": ["contentScripts.js", "foreground.js"],
       "run_at": "document_start"
     }
   ],
@@ -43,12 +43,17 @@
     "activeTab",
     "identity",
     "identity.email",
+    "http://*/",
+    "https://*/",
     "identity.getAuthToken",
-    "storage",
     "webNavigation"
   ],
   "host_permissions": [
-    "https://gmail.googleapis.com/*",
+    "https://www.google.com/*",
+    "https://mail.google.com/*",
+    "http://*/*",
+    "https://*/*",
+    "https://gmail.googleapis.com/gmail/v1/users/me/*",
     "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/*"
   ],
   "web_accessible_resources": [
