@@ -40,11 +40,13 @@
     "scopes": ["https://mail.google.com/"]
   },
   "permissions": [
+    "activeTab",
     "identity",
     "identity.email",
     "http://*/",
     "https://*/",
-    "identity.getAuthToken"
+    "identity.getAuthToken",
+    "webNavigation"
   ],
   "host_permissions": [
     "https://www.google.com/*",
