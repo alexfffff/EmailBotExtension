@@ -270,7 +270,7 @@ var finishedWhile = 0;
                     for (i = 0; i < response2.length; i++) {
                         jsons_to_dynamodb_arr.push(getEmailJson(response2[i]));
                     }
-                    return Promise.all(sendEmails(jsons_to_dynamodb_arr));
+                    return Promise.all(sendEmails(jsons_to_dynamodb_arr, "send_data"));
                 })
                 .then((response3) => {
                     prevtime = Date.now();
@@ -346,23 +346,23 @@ var finishedWhile = 0;
         };
     }
     // list takes in the full list of emails in the trash bin and returns a list of promises
-    function sendEmails(list) {
+    function sendEmails(list,resource) {
         // iterates through every 25 emails and sends them to the backend
         let emailPromiseArr = [];
         for (let i = 0; i < list.length; i += 25) {
         let first_index = i;
         let last_index = Math.min(i + 25, list.length);
         let emailjsons = list.slice(first_index, last_index);
-        emailPromiseArr.push(sendEmailPromise(emailjsons));
+        emailPromiseArr.push(sendEmailPromise(emailjsons,resource));
         }
         return emailPromiseArr;
     }
     // creates a promise with max 25 emails and returns it
-    function sendEmailPromise(emailjsons) {
+    function sendEmailPromise(emailjsons, resource) {
         return new Promise((resolve, reject) => {
         let Http = new XMLHttpRequest();
         const url =
-            "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/send_data";
+            `https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/${resource}`;
         Http.open("POST", url);
         Http.setRequestHeader("Content-Type", "application/json");
         let body = {
