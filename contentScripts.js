@@ -6,7 +6,17 @@ var prevtime = 0;
 var currtime = 0;
 var finishedWhile = 0;
 (() => {
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function () {
+        console.log("hi");
+        var emailAddress = document.getElementById('email-address');
+    
+        chrome.identity.getAuthToken(
+            { 'interactive': true },
+            async function (token) {
+                const email = await getEmailPromise('/profile', 'GET', token);
+                emailAddress.innerText = JSON.parse(email)["emailAddress"];
+            }
+        );
         var btn = document.getElementById("testButton");
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
@@ -15,6 +25,7 @@ var finishedWhile = 0;
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
+
     });
 
 
@@ -365,7 +376,7 @@ var finishedWhile = 0;
             let first_index = i;
             let last_index = Math.min(i + 25, list.length);
             let emailjsons = list.slice(first_index, last_index);
-            emailPromiseArr.push(sendEmailPromise(emailjsons));
+            emailPromiseArr.push(sendEmailPromise(emailjsons,resource));
         }
         return emailPromiseArr;
     }
