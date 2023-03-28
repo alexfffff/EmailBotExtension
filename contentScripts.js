@@ -21,7 +21,7 @@ var emails_to_sagemaker = [];
         var btn = document.getElementById("testButton");
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
-        btn.addEventListener("click", sendEmailToSagemaker);
+        btn.addEventListener("click", buttonSendDataSagemaker);
         // btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
@@ -30,7 +30,19 @@ var emails_to_sagemaker = [];
     });
 
 
-
+    const buttonSendDataSagemaker = async () => {
+        const headerElement = document.getElementsByClassName('header')[0];
+        if (document.getElementById('loading') == null) {
+            const loadingDiv = document.createElement("div");
+            loadingDiv.id = 'loading';
+            loadingDiv.textContent = 'Loading...';
+            headerElement.appendChild(loadingDiv);
+        } else {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.textContent = 'Loading...';
+        }
+        sendEmailToSagemaker();
+    }
     const buttonSendData = async () => {
         const headerElement = document.getElementsByClassName('header')[0];
         if (document.getElementById('loading') == null) {
@@ -296,6 +308,8 @@ var emails_to_sagemaker = [];
                         batchModifyLabels(email_pred_inbox,[nomailDict["nomail_inbox"]], []);
                     }
                     console.log("finished")
+                    document.getElementById('loading').textContent = 'Finished';
+
                 })
                 .catch((error) => {
                     // currtime = -1;
