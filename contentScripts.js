@@ -1,7 +1,7 @@
 //// alex+lucy
 var pageTokenlist = [];
 var nomailDict = {};
-var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent"];
+var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent", "nomail_to_delete", "nomail: to review", "nomail: keep"];
 var prevtime = 0;
 var currtime = 0;
 var finishedWhile = 0;
@@ -125,6 +125,16 @@ var finishedWhile = 0;
                               "messageListVisibility": "show",
                               "labelListVisibility": "labelShow",
                             });
+      if (labelName === "nomail: to review") {
+          body = JSON.stringify({"name": labelName,
+                "messageListVisibility": "show",
+                "labelListVisibility": "labelShow",
+                "color": {
+                    "textColor": "#ffffff",
+                    "backgroundColor": "#16a765"
+                },
+                });
+      }
       Http.send(body);
       Http.onreadystatechange = async (e) => {
           if (Http.readyState == 4 && Http.status == 200) {
@@ -478,6 +488,49 @@ var finishedWhile = 0;
             };
             Http.onerror = () => reject(Http.statusText);
         });
+    }
+
+    // takes in list of emails, list of label ids to add
+    function modifyLabelList(list, labelids) {
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            let promiselist = [];
+            for (let i = 0; i < list.length; i++) {
+                promiselist.push(modifyLabels(list[i].id, labelids, []));
+            }
+            Promise.all(get_label_id_arr).then((response) => {
+                console.log(response);
+            })
+        });
+    }
+
+    // returns a new promise when given a list of emailJsons.
+    function sendEmailPromise2(emailjsons, url) {
+        return new Promise((resolve, reject) => {
+        let Http = new XMLHttpRequest();
+        Http.open("POST", url);
+        Http.setRequestHeader("Content-Type", "application/json");
+        let body = {
+            emails: emailjsons,
+        };
+
+        Http.send(JSON.stringify(body));
+        Http.onload = () => {
+            if (Http.status >= 200 && Http.status < 300) {
+            resolve(Http.response);
+            } else {
+            reject(Http.statusText);
+            }
+        };
+        Http.onerror = () => reject(Http.statusText);
+        });
+    }
+
+    // emailPromiseArr contains 
+    function sendEmails2(list, url) {
+        // iterates through every 25 emails and sends them to the backend
+        let emailPromiseArr = [];
+        emailPromiseArr.push(sendEmailPromise2(list, url));
+        return emailPromiseArr;
     }
 
     // alex + lucy merge end
