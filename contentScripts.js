@@ -77,25 +77,25 @@ var finishedWhile = 0;
 
     // checks if nomail label exists. if not, adds label
     function checkNomailLabel(token) {
-      let promiselist = [];
-      promiselist.push(getEmailPromise("/labels", "GET", token));
-      if (Object.keys(nomailDict).length != nomailLabels.length) {
-        Promise.all(promiselist).then((response) => {
-            response_json = JSON.parse(response[0]);
-            for (let i = 0; i < response_json.labels.length; i += 1) {
-                if (nomailLabels.includes(response_json.labels[i].name)) {
-                    nomailDict[response_json.labels[i].name] = response_json.labels[i].id;
+        let promiselist = [];
+        promiselist.push(getEmailPromise("/labels", "GET", token));
+        if (Object.keys(nomailDict).length != nomailLabels.length) {
+            Promise.all(promiselist).then((response) => {
+                response_json = JSON.parse(response[0]);
+                for (let i = 0; i < response_json.labels.length; i += 1) {
+                    if (nomailLabels.includes(response_json.labels[i].name)) {
+                        nomailDict[response_json.labels[i].name] = response_json.labels[i].id;
+                    }
                 }
-            }
-            for (let i = 0; i < nomailLabels.length; i += 1) {
-                if (nomailLabels[i] in nomailDict) {
-                    continue;
-                } else {
-                    createLabel(token, nomailLabels[i]);
+                for (let i = 0; i < nomailLabels.length; i += 1) {
+                    if (nomailLabels[i] in nomailDict) {
+                        continue;
+                    } else {
+                        createLabel(token, nomailLabels[i]);
+                    }
                 }
-            }
-        }).catch((error) => {console.error(error.message)}).then();
-      }
+            }).catch((error) => { console.error(error.message) }).then();
+        }
     }
 
     function testLabels(token) {
@@ -125,16 +125,6 @@ var finishedWhile = 0;
                               "messageListVisibility": "show",
                               "labelListVisibility": "labelShow",
                             });
-      if (labelName === "nomail: to review") {
-          body = JSON.stringify({"name": labelName,
-                "messageListVisibility": "show",
-                "labelListVisibility": "labelShow",
-                "color": {
-                    "textColor": "#ffffff",
-                    "backgroundColor": "#16a765"
-                },
-                });
-      }
       Http.send(body);
       Http.onreadystatechange = async (e) => {
           if (Http.readyState == 4 && Http.status == 200) {
@@ -146,20 +136,20 @@ var finishedWhile = 0;
 
     // Retrieves message id of first 10 emails in inbox
     function getMessageId(authToken) {
-      let promiselist = [];
-      promiselist.push(getEmailPromise("/messages?maxResults=10&q=in:inbox", "GET", authToken));
+        let promiselist = [];
+        promiselist.push(getEmailPromise("/messages?maxResults=10&q=in:inbox", "GET", authToken));
 
-      Promise.all(promiselist).then((response) => {
-        response_json = JSON.parse(response[0]);
-        console.log(response_json);
-        for (let i = 0; i < response_json.messages.length; i += 1) {
-          console.log(response_json.messages[i].id);
-        }
+        Promise.all(promiselist).then((response) => {
+            response_json = JSON.parse(response[0]);
+            console.log(response_json);
+            for (let i = 0; i < response_json.messages.length; i += 1) {
+                console.log(response_json.messages[i].id);
+            }
     }).catch((error) => {console.error(error.message)}).then();
     }
 
 
-    function getpagetokenlist(promiselist, authToken) { 
+    function getpagetokenlist(promiselist, authToken) {
         Promise.all(promiselist).then((response) => {
             response_json = JSON.parse(response[0]);
             // check if response_json has nextPageToken
@@ -207,24 +197,24 @@ var finishedWhile = 0;
             get_label_id_arr.push(listLabelId(token));
             nomailDict = {};
             Promise.all(get_label_id_arr).then((response) => {
-                    if (Object.keys(nomailDict).length == nomailLabels.length) {
-                        return nomailDict;
-                    } 
-                    let labelArr = JSON.parse(response[0])
-                    for (i = 0; i < labelArr.labels.length; i++) {
-                        if (nomailLabels.includes(labelArr.labels[i].name)) {
-                            nomailDict[labelArr.labels[i].name] = labelArr.labels[i].id;
-                        }
+                if (Object.keys(nomailDict).length == nomailLabels.length) {
+                    return nomailDict;
+                }
+                let labelArr = JSON.parse(response[0])
+                for (i = 0; i < labelArr.labels.length; i++) {
+                    if (nomailLabels.includes(labelArr.labels[i].name)) {
+                        nomailDict[labelArr.labels[i].name] = labelArr.labels[i].id;
                     }
-                    if (Object.keys(nomailDict).length == nomailLabels.length) {
-                        return nomailDict;
-                    } else {
-                        throw new Error("Label not found")
-                    };
-                }).then((response) => {
-                    let get_email_arr = [];
-                    get_email_arr.push(
-                        getEmailPromise(
+                }
+                if (Object.keys(nomailDict).length == nomailLabels.length) {
+                    return nomailDict;
+                } else {
+                    throw new Error("Label not found")
+                };
+            }).then((response) => {
+                let get_email_arr = [];
+                get_email_arr.push(
+                    getEmailPromise(
                         `/messages?maxResults=500&includeSpamTrash=true&q=in:inbox&labelIds=${nomailDict["nomail_keep"]}`,
                         "GET",
                         token
@@ -302,16 +292,16 @@ var finishedWhile = 0;
         email_response = JSON.parse(email_response);
         let body = "";
         if (email_response.payload.mimeType.startsWith("text/")) {
-        body = email_response.payload.body.data;
+            body = email_response.payload.body.data;
         } else {
-        body = email_response.payload.parts[0].body.data;
+            body = email_response.payload.parts[0].body.data;
         }
         if (email_response.payload.mimeType.startsWith("multipart/")) {
-        let partsVar = email_response.payload.parts[0];
-        while (partsVar.hasOwnProperty("parts")) {
-            body = partsVar.parts[0].body.data;
-            partsVar = partsVar.parts[0];
-        }
+            let partsVar = email_response.payload.parts[0];
+            while (partsVar.hasOwnProperty("parts")) {
+                body = partsVar.parts[0].body.data;
+                partsVar = partsVar.parts[0];
+            }
         }
         let emailid = email_response.id;
         let subject = "";
@@ -321,41 +311,41 @@ var finishedWhile = 0;
         let labels = email_response.labelIds.toString();
         let threadid = email_response.threadId;
         for (j = 0; j < email_response.payload.headers.length; j++) {
-        if (email_response.payload.headers[j].name === "Subject") {
-            subject = email_response.payload.headers[j].value;
-        }
-        if (email_response.payload.headers[j].name === "Date") {
-            date = email_response.payload.headers[j].value;
-        }
-        if (email_response.payload.headers[j].name === "To") {
-            receiver = email_response.payload.headers[j].value;
-        }
-        if (email_response.payload.headers[j].name === "From") {
-            sender = email_response.payload.headers[j].value;
-        }
+            if (email_response.payload.headers[j].name === "Subject") {
+                subject = email_response.payload.headers[j].value;
+            }
+            if (email_response.payload.headers[j].name === "Date") {
+                date = email_response.payload.headers[j].value;
+            }
+            if (email_response.payload.headers[j].name === "To") {
+                receiver = email_response.payload.headers[j].value;
+            }
+            if (email_response.payload.headers[j].name === "From") {
+                sender = email_response.payload.headers[j].value;
+            }
         }
         return createEmailJson(
-        emailid,
-        body,
-        subject,
-        date,
-        receiver,
-        sender,
-        labels,
-        threadid
+            emailid,
+            body,
+            subject,
+            date,
+            receiver,
+            sender,
+            labels,
+            threadid
         );
     }
     // creates an email object
     function createEmailJson(e, b, su, d, r, se, l, t) {
         return {
-        emailuuid: e,
-        body: b,
-        subject: su,
-        date: d,
-        reciever: r,
-        sender: se,
-        labels: l,
-        threadid: t,
+            emailuuid: e,
+            body: b,
+            subject: su,
+            date: d,
+            reciever: r,
+            sender: se,
+            labels: l,
+            threadid: t,
         };
     }
     // list takes in the full list of emails in the trash bin and returns a list of promises
@@ -363,9 +353,9 @@ var finishedWhile = 0;
         // iterates through every 25 emails and sends them to the backend
         let emailPromiseArr = [];
         for (let i = 0; i < list.length; i += 25) {
-        let first_index = i;
-        let last_index = Math.min(i + 25, list.length);
-        let emailjsons = list.slice(first_index, last_index);
+            let first_index = i;
+            let last_index = Math.min(i + 25, list.length);
+            let emailjsons = list.slice(first_index, last_index);
         emailPromiseArr.push(sendEmailPromise(emailjsons));
         }
         return emailPromiseArr;
@@ -382,35 +372,35 @@ var finishedWhile = 0;
             emails: emailjsons,
         };
 
-        Http.send(JSON.stringify(body));
-        Http.onload = () => {
-            if (Http.status >= 200 && Http.status < 300) {
-            resolve(Http.response);
-            } else {
-            reject(Http.statusText);
-            }
-        };
-        Http.onerror = () => reject(Http.statusText);
+            Http.send(JSON.stringify(body));
+            Http.onload = () => {
+                if (Http.status >= 200 && Http.status < 300) {
+                    resolve(Http.response);
+                } else {
+                    reject(Http.statusText);
+                }
+            };
+            Http.onerror = () => reject(Http.statusText);
         });
     }
     // accesses google api to get information about emails
     function getEmailPromise(query, queryType, atoken) {
         return new Promise((resolve, reject) => {
-        let Http = new XMLHttpRequest();
-        const url = "https://gmail.googleapis.com/gmail/v1/users/me" + query;
-        Http.open(queryType, url);
-        Http.setRequestHeader("Content-Type", "application/json");
-        Http.setRequestHeader("Authorization", `Bearer ${atoken}`);
-        Http.send();
+            let Http = new XMLHttpRequest();
+            const url = "https://gmail.googleapis.com/gmail/v1/users/me" + query;
+            Http.open(queryType, url);
+            Http.setRequestHeader("Content-Type", "application/json");
+            Http.setRequestHeader("Authorization", `Bearer ${atoken}`);
+            Http.send();
 
-        Http.onload = () => {
-            if (Http.status >= 200 && Http.status < 300) {
-            resolve(Http.response);
-            } else {
-            reject(Http.statusText);
-            }
-        };
-        Http.onerror = () => reject(Http.statusText);
+            Http.onload = () => {
+                if (Http.status >= 200 && Http.status < 300) {
+                    resolve(Http.response);
+                } else {
+                    reject(Http.statusText);
+                }
+            };
+            Http.onerror = () => reject(Http.statusText);
         });
     }
     // adds the label to the emailid 
@@ -480,7 +470,7 @@ var finishedWhile = 0;
                 if (Http.readyState == 4 && Http.status == 200) {
                     // check if response is undefined
                     resolve(Http.response);
-                        
+
                 } else {
                     console.log("shouldn't see this")
                     reject(Http.statusText);
@@ -553,10 +543,10 @@ var finishedWhile = 0;
         let iconContainer = document.getElementsByClassName("G-Ni G-aE J-J5-Ji")[1];
 
         if (iconContainer !== undefined && iconContainer != null) {
-        console.log("hi");
-        iconContainer.appendChild(ce_main_container);
+            console.log("hi");
+            iconContainer.appendChild(ce_main_container);
         } else {
-        setTimeout(() => injectIconIntoContainer(icon), 200);
+            setTimeout(() => injectIconIntoContainer(icon), 200);
         }
     };
     // injectIconIntoContainer(ce_main_container);

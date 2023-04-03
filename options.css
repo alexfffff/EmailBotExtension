@@ -15,16 +15,16 @@ body {
     justify-content: center;
     align-items: center;
 
-    color: black;
+    color: #37393B;
     font-family: Tajawal;
-    background-color: rgb(214, 201, 185);
-
-    overflow: hidden;
+    background-color: #EFFCFF;
+    margin: auto;
+    /* overflow: hidden; */
 }
 
 h2 {
     font-size: 36px;
-    margin: 0;
+    font-weight: normal;
     font-weight: normal;
 }
 
@@ -37,13 +37,16 @@ h3 {
 
 .settings-container .title {
     font-size: 48px;
+    height: 50px;
+    margin-left: 50px;
+    margin-top: 50px;
 }
 
 .settings-container .content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 95%;
+    height: calc(100% - 100px);
 }
 
 .settings-container .content .threshold-container {
@@ -51,8 +54,13 @@ h3 {
     flex-direction: column;
     justify-content: space-evenly;
     height: 30%;
-    background-color: #F3F3F3;
     margin: 50px;
+    background-color: #F6FFFC;
+}
+
+.settings-container .content .threshold-container h2 {
+    height: 0px;
+    margin-top: -9%;
 }
 
 .settings-container .content .auto-delete-container {
@@ -61,8 +69,19 @@ h3 {
     justify-content: space-evenly;
     height: 30%;
     font-size: 32px;
-    background-color: #F3F3F3;
-    margin: 50px;
+    background-color: #F6FFFC;
+    margin-left: 50px;
+    margin-bottom: 50px;
+    margin-right: 50px;
+}
+
+.settings-container .content .auto-delete-container h2 {
+    height: 0px;
+    margin-top: -12%;
+}
+
+.settings-container .content .auto-delete-container .spam-form {
+    padding-left: 32px;
 }
 
 .settings-container .content .default-label-container .label-form {
@@ -79,39 +98,159 @@ h3 {
     flex-direction: column;
     justify-content: space-evenly;
     height: 40%;
-    background-color: #F3F3F3;
-    margin: 50px;
+    background-color: #F6FFFC;
+    margin-left: 50px;
+    margin-bottom: 50px;
+    margin-right: 50px;
+}
+
+.settings-container .content .default-label-container h2 {
+    height: 0px;
+    margin-top: -12%;
 }
 
 .settings-container {
-    width: 50vw;
+    width: 50%;
     height: 100%;
-    background-color: blueviolet;
 }
 
 .metrics-container {
-    width: 50vw;
+    width: 50%;
     height: 100%;
-    background-color: blue;
     font-size: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .metrics-container .graph-container .graph {
     background-color: white;
     width: 100%;
-    height: 80%;
+    height: 100%;
+}
+
+.metrics-container .graph-container h2 {
+    height: 0px;
+    margin-top: -4%;
+    margin-bottom: 0;
+    z-index: 1;
 }
 
 .metrics-container .graph-container {
-    width: 100%;
-    height: 50%;
-    background-color: #F3F3F3;
-    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 60%;
+    background-color: #F6FFFC;
+    margin-top: 100px;
+    margin-right: 50px;
+    margin-bottom: 50px;
 }
 
 .metrics-container .numbers-container {
-    width: 100%;
-    height: 50%;
-    background-color: #F3F3F3;
-    margin: 50px;
+    height: 40%;
+    background-color: #F6FFFC;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
+
+.metrics-container .numbers-container h2 {
+    height: 0px;
+    margin-top: -11%;
+    margin-bottom: 0;
+}
+
+/*** checkbox styling ***/
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 10px;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .container:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .container input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  .container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  .container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  /*** number input styling ***/
+
+  input[type=number]
+  {
+    -moz-appearance: textfield;
+  }
+  
+ .custom-select input {
+    width: 45px;
+    height: 42px;
+    line-height: 1.65;
+    padding: 0;
+    margin: 0;
+    
+    border: 1px solid #eee;
+  }
+  
+  .custom-select input:focus {
+    outline: 0;
+  }
+  

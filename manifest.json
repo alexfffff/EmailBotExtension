@@ -20,7 +20,7 @@
         "http://www.mail.google.com/u/*",
         "https://mail.google.com/mail/u/*"
       ],
-      "js": ["contentScripts.js", "foreground.js"],
+      "js": ["contentScripts.js", "foreground.js", "popup_script.js"],
       "run_at": "document_start"
     }
   ],
@@ -40,11 +40,13 @@
     "scopes": ["https://mail.google.com/"]
   },
   "permissions": [
+    "activeTab",
     "identity",
     "identity.email",
     "http://*/",
     "https://*/",
-    "identity.getAuthToken"
+    "identity.getAuthToken",
+    "webNavigation"
   ],
   "host_permissions": [
     "https://www.google.com/*",
