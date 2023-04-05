@@ -1,77 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Options</title>
-    <link rel="stylesheet" href="options.css">
-</head>
+    <link rel="stylesheet" href="options.css" />
+  </head>
 
-<body>
+  <body>
     <div class="settings-container">
-        <div class="title">Options</div>
-        <div class="content">
-            <div class="threshold-container">
-                <h2>threshold</h2>
-                <h3>lower limit 
-                    <span class="custom-select" style="width:150px;">
-                    <input type="number" min="30" max="90" step="2" value="50">
-                </span>
-            </h3>
-                <h3>upper limit
-                    <span class="custom-select">
-                    <input type="number" min="30" max="90" step="2" value="50">
-                    </span>
-                </h3>
-            </div>
-            <div class="auto-delete-container">
-                <h2>toggle auto delete</h2>
-                <h3>
-                <label class="container">move spam mail straight to trash without review
-                    <input type="checkbox" checked="checked">
-                    <span class="checkmark"></span>
-                  </label>
-                </h3>
-            </div>
-            <div class="default-label-container">
-                <h2>change default nomail inbox</h2>
-                <!-- TODO: FILL OUT OPTIONS WITH EXISTING LABELS -->
-                <form class="label-form">
-                    <!-- <label for="cars"></label> -->
-                    <select name="label" id="labels">
-                        <option value="label">label 1</option>
-                        <option value="label">label 2</option>
-                        <option value="label">label 3</option>
-                        <option value="label">label 4</option>
-                    </select>
-                </form>
-            </div>
+      <div class="title">Options</div>
+      <div class="content">
+        <div class="threshold-container">
+          <h2>threshold</h2>
+          <h3>
+            lower limit
+            <span class="custom-select" style="width: 150px">
+              <input type="number" min="30" max="90" step="2" value="50" />
+            </span>
+          </h3>
+          <h3>
+            upper limit
+            <span class="custom-select">
+              <input type="number" min="30" max="90" step="2" value="50" />
+            </span>
+          </h3>
         </div>
+        <div class="auto-delete-container">
+          <h2>toggle auto delete</h2>
+          <h3>
+            <label class="container">
+              <input type="checkbox" checked="checked" />
+              <span class="checkmark"></span>
+              <p>move spam mail straight to trash without review</p>
+            </label>
+          </h3>
+        </div>
+        <div class="default-label-container">
+          <h2>change default nomail inbox</h2>
+          <!-- TODO: FILL OUT OPTIONS WITH EXISTING LABELS -->
+          <!-- <form class="label-form">
+            <select name="label" id="labels">
+              <option value="label">label 1</option>
+              <option value="label">label 2</option>
+              <option value="label">label 3</option>
+              <option value="label">label 4</option>
+            </select>
+          </form> -->
+        </div>
+      </div>
+      <a class="link" id="popup">back</a>
     </div>
     <div class="metrics-container">
-        <div class="graph-container">
-            <h2>view from ___ to ____</h2>
-            <div class="graph"></div>
-        </div>
+      <div class="graph-container">
+        <h2>view from ___ to ____</h2>
+        <div class="graph"></div>
+      </div>
 
-        <div class="numbers-container">
-            <h2>Metrics</h2>
-            <h3 class="metric-row">
-                total emails deleted
-            </h3>
-            <h3 class="metric-row">
-                total spam identified
-            </h3>
-            <h3 class="metric-row">
-                false detected emails
-            </h3>
-        </div>
+      <div class="numbers-container">
+        <h2>Metrics</h2>
+        <h3 class="metric-row">total emails deleted</h3>
+        <h3 class="metric-row">total spam identified</h3>
+        <h3 class="metric-row">false detected emails</h3>
+      </div>
     </div>
 
-
     <script src="./options_script.js"></script>
-</body>
-
+  </body>
 </html>

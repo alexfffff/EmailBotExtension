@@ -35,6 +35,10 @@ var emails_to_sagemaker = [];
         }
         sendEmailToSagemaker();
     }
+    function openOptions() {
+        window.location.href = "options.html";
+      }
+
     const buttonSendData = async () => {
         const headerElement = document.getElementsByClassName('header')[0];
         if (document.getElementById('loading') == null) {
