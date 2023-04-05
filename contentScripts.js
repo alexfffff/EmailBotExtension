@@ -11,6 +11,10 @@ var emails_to_sagemaker = [];
         console.log("hi");
         var emailAddress = document.getElementById('email-address');
     
+        
+        var optionsBtn = document.getElementById("options");
+        optionsBtn.addEventListener("click", openOptions);
+
         chrome.identity.getAuthToken(
             { 'interactive': true },
             async function (token) {
@@ -30,6 +34,9 @@ var emails_to_sagemaker = [];
     });
 
 
+    function openOptions() {
+        window.location.href = "options.html";
+      }
 
     const buttonSendData = async () => {
         const headerElement = document.getElementsByClassName('header')[0];

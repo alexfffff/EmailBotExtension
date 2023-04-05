@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NoMail</title>
     <link rel="stylesheet" href="popup.css" />
-</head>
+  </head>
 
-<!-- refer to popup_script.js to update values with data from backend -->
+  <!-- refer to popup_script.js to update values with data from backend -->
 
-<body>
+  <body>
     <div class="popup-content">
-        <div class="header">
-            <div class="title">nomail
-                <!-- ADD FUNCTION TO TEST HERE -->
-                <button id="testButton">send</button>
-            </div>
-            <div class="email" id="email-address">loading...</div>
+      <div class="header">
+        <div class="title">
+          nomail
+          <!-- ADD FUNCTION TO TEST HERE -->
+          <button id="testButton">send</button>
         </div>
-        <div class="info">
-            <div class="info--title">this week</div>
-            <div class="info--details">
-                emails in review
-                <div>20</div>
-            </div>
-            <div class="info--details">
-                emails detected
-                <div>41</div>
-            </div>
-            <div class="info--details">
-                emails deleted
-                <div>103</div>
-            </div>
+        <div class="email" id="email-address">loading...</div>
+      </div>
+      <div class="info">
+        <div class="info--title">this week</div>
+        <div class="info--details">
+          emails in review
+          <div>20</div>
         </div>
-        <div class="options">
-            <a class="link" href="./options.html">review list</a>
-            <a class="link" href="./options.html" target="_blank">options/analytics</a>
+        <div class="info--details">
+          emails detected
+          <div>41</div>
         </div>
+        <div class="info--details">
+          emails deleted
+          <div>103</div>
+        </div>
+      </div>
+      <div class="options">
+        <a class="link" href="./options.html">review list</a>
+        <a class="link" id="options">options/analytics</a>
+      </div>
     </div>
     <!-- test functions from contentscripts in popuplhtml -->
     <script src="./contentScripts.js"></script>
-</body>
-
+    <script src="./popup_script.js"></script>
+  </body>
 </html>
