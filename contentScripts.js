@@ -8,20 +8,12 @@ var finishedWhile = 0;
 var emails_to_sagemaker = [];
 (() => {
     document.addEventListener("DOMContentLoaded", async function () {
-        console.log("hi");
-        var emailAddress = document.getElementById('email-address');
-    
-        chrome.identity.getAuthToken(
-            { 'interactive': true },
-            async function (token) {
-                const email = await getEmailPromise('/profile', 'GET', token);
-                emailAddress.innerText = JSON.parse(email)["emailAddress"];
-            }
-        );
         var btn = document.getElementById("testButton");
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
         btn.addEventListener("click", buttonSendDataSagemaker);
+        var btn2 = document.getElementById("testButton2");
+        btn2.addEventListener("click", buttonSendData);
         // btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
@@ -63,7 +55,7 @@ var emails_to_sagemaker = [];
                 console.log("in while loop");
                 await new Promise(r => setTimeout(r, 3000));
             }
-            await new Promise(r => setTimeout(r, 5000));
+            await new Promise(r => setTimeout(r, 7000));
             let temp = currtime;
             currtime = prevtime;
             prevtime = temp;
@@ -350,7 +342,7 @@ var emails_to_sagemaker = [];
                     );
                     get_email_arr.push(
                         getEmailPromise(
-                            `/messages?maxResults=500&includeSpamTrash=true&q=in:trash has:nouserlabels`,
+                            `/messages?maxResults=500&includeSpamTrash=true&q=in:trash NOT label:nomail_delete`,
                             "GET",
                             token
                         )
