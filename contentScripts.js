@@ -9,6 +9,8 @@ var emails_to_sagemaker = [];
 (() => {
     document.addEventListener("DOMContentLoaded", async function () {
         var btn = document.getElementById("testButton");
+        var optionsBtn = document.getElementById("options");
+        optionsBtn.addEventListener("click", openOptions);
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
         btn.addEventListener("click", buttonSendDataSagemaker);
