@@ -1,256 +1,269 @@
+
+ 
+
 @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400&display=swap");
 
 @font-face {
-    font-family: "Tajawal";
-    font-style: normal;
-    font-weight: 400;
-    src: url("../fonts/Tajawal.woff") format("woff");
+  font-family: "Tajawal";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Tajawal.woff") format("woff");
 }
 
 body {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+  width: 750px;
+  height: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 
-    color: #37393B;
-    font-family: Tajawal;
-    background-color: #EFFCFF;
-    margin: auto;
-    /* overflow: hidden; */
+  color: #37393b;
+  font-family: Tajawal;
+  background-color: #effcff;
+  margin: auto;
+  /* overflow: hidden; */
 }
 
 h2 {
-    font-size: 36px;
-    font-weight: normal;
-    font-weight: normal;
+  font-size: 23px;
+  font-weight: normal;
+  font-weight: normal;
+}
+
+p {
+  margin-left: 17px;
+  font-size: 17px;
 }
 
 h3 {
-    font-size: 32px;
-    margin: 0;
-    padding-left: 32px;
-    font-weight: normal;
+  font-size: 22px;
+  margin: 0;
+  padding-left: 32px;
+  font-weight: normal;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  font-size: 20px;
+  padding-left: 20px;
+  text-decoration: underline;
 }
 
 .settings-container .title {
-    font-size: 48px;
-    height: 50px;
-    margin-left: 50px;
-    margin-top: 50px;
+  font-size: 48px;
+  height: 50px;
+  margin-left: 50px;
 }
 
 .settings-container .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: calc(100% - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100% - 100px);
 }
 
 .settings-container .content .threshold-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: 30%;
-    margin: 50px;
-    background-color: #F6FFFC;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 30%;
+  margin: 50px;
+  background-color: #f6fffc;
 }
 
 .settings-container .content .threshold-container h2 {
-    height: 0px;
-    margin-top: -9%;
+  height: 0px;
+  margin-top: -9%;
 }
 
 .settings-container .content .auto-delete-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: 30%;
-    font-size: 32px;
-    background-color: #F6FFFC;
-    margin-left: 50px;
-    margin-bottom: 50px;
-    margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 30%;
+  font-size: 32px;
+  background-color: #f6fffc;
+  margin-left: 50px;
+  margin-bottom: 50px;
+  margin-right: 50px;
 }
 
 .settings-container .content .auto-delete-container h2 {
-    height: 0px;
-    margin-top: -12%;
+  height: 0px;
+  margin-top: -12%;
 }
 
 .settings-container .content .auto-delete-container .spam-form {
-    padding-left: 32px;
+  padding-left: 32px;
 }
 
 .settings-container .content .default-label-container .label-form {
-    width: 100%;
-    height: 60%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: center;
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
 }
 
 .settings-container .content .default-label-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: 40%;
-    background-color: #F6FFFC;
-    margin-left: 50px;
-    margin-bottom: 50px;
-    margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 40%;
+  background-color: #f6fffc;
+  margin-left: 50px;
+  margin-bottom: 50px;
+  margin-right: 50px;
 }
 
 .settings-container .content .default-label-container h2 {
-    height: 0px;
-    margin-top: -12%;
+  height: 0px;
+  margin-top: -12%;
 }
 
 .settings-container {
-    width: 50%;
-    height: 100%;
+  width: 50%;
+  height: 100%;
 }
 
 .metrics-container {
-    width: 50%;
-    height: 100%;
-    font-size: 36px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  width: 50%;
+  height: 100%;
+  font-size: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .metrics-container .graph-container .graph {
-    background-color: white;
-    width: 100%;
-    height: 100%;
+  background-color: white;
+  width: 100%;
+  height: 100%;
 }
 
 .metrics-container .graph-container h2 {
-    height: 0px;
-    margin-top: -4%;
-    margin-bottom: 0;
-    z-index: 1;
+  height: 0px;
+  margin-top: -4%;
+  margin-bottom: 0;
+  z-index: 1;
 }
 
 .metrics-container .graph-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 60%;
-    background-color: #F6FFFC;
-    margin-top: 100px;
-    margin-right: 50px;
-    margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 60%;
+  background-color: #f6fffc;
+  margin-top: 100px;
+  margin-right: 50px;
+  margin-bottom: 50px;
 }
 
 .metrics-container .numbers-container {
-    height: 40%;
-    background-color: #F6FFFC;
-    margin-right: 50px;
-    margin-bottom: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+  height: 40%;
+  background-color: #f6fffc;
+  margin-right: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .metrics-container .numbers-container h2 {
-    height: 0px;
-    margin-top: -11%;
-    margin-bottom: 0;
+  height: 0px;
+  margin-top: -11%;
+  margin-bottom: 0;
 }
 
 /*** checkbox styling ***/
 
 .container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
+  display: block;
+  position: relative;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 20px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
 /* Hide the browser's default checkbox */
 .container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-  
-  /* Create a custom checkbox */
-  .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-    border-radius: 10px;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .container:hover input ~ .checkmark {
-    background-color: #ccc;
-  }
-  
-  /* When the checkbox is checked, add a blue background */
-  .container input:checked ~ .checkmark {
-    background-color: #2196F3;
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-  
-  /* Show the checkmark when checked */
-  .container input:checked ~ .checkmark:after {
-    display: block;
-  }
-  
-  /* Style the checkmark/indicator */
-  .container .checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
 
-  /*** number input styling ***/
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 20px;
+  left: -20px;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 10px;
+}
 
-  input[type=number]
-  {
-    -moz-appearance: textfield;
-  }
-  
- .custom-select input {
-    width: 45px;
-    height: 42px;
-    line-height: 1.65;
-    padding: 0;
-    margin: 0;
-    
-    border: 1px solid #eee;
-  }
-  
-  .custom-select input:focus {
-    outline: 0;
-  }
-  
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196f3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/*** number input styling ***/
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.custom-select input {
+  width: 45px;
+  height: 42px;
+  line-height: 1.65;
+  padding: 0;
+  margin: 0;
+
+  border: 1px solid #eee;
+}
+
+.custom-select input:focus {
+  outline: 0;
+}

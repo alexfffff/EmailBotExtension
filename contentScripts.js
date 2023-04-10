@@ -1,27 +1,44 @@
 //// alex+lucy
 var pageTokenlist = [];
 var nomailDict = {};
-var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent", "nomail_to_delete", "nomail: to review", "nomail: keep"];
+var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent", "nomail_trash", "nomail_inbox"];
 var prevtime = 0;
 var currtime = 0;
 var finishedWhile = 0;
+var emails_to_sagemaker = [];
 (() => {
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log("first thing");
+    document.addEventListener("DOMContentLoaded", async function () {
         var btn = document.getElementById("testButton");
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
-        console.log("content scripts 1");
-        messageTest();
-        console.log("content scripts 2");
-        btn.addEventListener("click", buttonSendData);
+        btn.addEventListener("click", buttonSendDataSagemaker);
+        var btn2 = document.getElementById("testButton2");
+        console.log("hello");
+        btn2.addEventListener("click", buttonSendData);
         // btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
         });
+
     });
 
 
+    const buttonSendDataSagemaker = async () => {
+        const headerElement = document.getElementsByClassName('header')[0];
+        if (document.getElementById('loading') == null) {
+            const loadingDiv = document.createElement("div");
+            loadingDiv.id = 'loading';
+            loadingDiv.textContent = 'Loading...';
+            headerElement.appendChild(loadingDiv);
+        } else {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.textContent = 'Loading...';
+        }
+        sendEmailToSagemaker();
+    }
+    function openOptions() {
+        window.location.href = "options.html";
+      }
 
     const buttonSendData = async () => {
         const headerElement = document.getElementsByClassName('header')[0];
@@ -43,7 +60,7 @@ var finishedWhile = 0;
                 console.log("in while loop");
                 await new Promise(r => setTimeout(r, 3000));
             }
-            await new Promise(r => setTimeout(r, 5000));
+            await new Promise(r => setTimeout(r, 7000));
             let temp = currtime;
             currtime = prevtime;
             prevtime = temp;
@@ -53,26 +70,35 @@ var finishedWhile = 0;
         finishedWhile = 0;
     }
     const messageTest = async () => {
-        //chrome.identity.getAuthToken({ interactive: true }, async function (token) {
+        chrome.identity.getAuthToken({ interactive: true }, async function (token) {
             // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
-            console.log("message is sending 1");
             const response = await chrome.runtime.sendMessage({greeting: "hello"});
-            console.log("message is sending 2");
             // do something with response here, not outside the function
             console.log(response);
-        //});
+        });
 
     }
     const testButtonFunction = () => {
-        chrome.identity.getAuthToken({interactive: true}, function(token) {
-            //promisearr.push(getEmailPromise("/messages?maxResults=500", "GET", token));
-            //getpagetokenlist(promisearr, token);
-            //console.log(pageTokenlist);
-            getMessageId(token);
-            //getLabelId(token);
-            //console.log(labelId);
-            //testLabels(token);
-        });
+        // chrome.identity.getAuthToken({interactive: true}, function(token) {
+        //     //promisearr.push(getEmailPromise("/messages?maxResults=500", "GET", token));
+        //     //getpagetokenlist(promisearr, token);
+        //     //console.log(pageTokenlist);
+        //     getMessageId(token);
+        //     //getLabelId(token);
+        //     //console.log(labelId);
+        //     //testLabels(token);
+        // });
+
+        // create a new header element with loading id and text and append to header
+        const headerElement = document.getElementByClassName('header');
+        const newDiv = document.createElement('div');
+        newDiv.id = 'loading';
+        newDiv.textContent = 'loading';
+        headerElement.appendChild(newDiv);
+
+        // code to remove the loading div from the dom
+        // will have to redefine newDiv in another function
+        newDiv.parentNode.removeChild(newDiv);
     }
 
     // checks if nomail label exists. if not, adds label
@@ -99,39 +125,43 @@ var finishedWhile = 0;
     }
 
     function testLabels(token) {
-      let Http = new XMLHttpRequest();
-      query = "/messages/185ea543e8b85742/modify"
-      const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
-      Http.open("POST", url);
-      Http.setRequestHeader("Content-Type", "application/json");
-      Http.setRequestHeader("Authorization", `Bearer ${token}`);
-      body = JSON.stringify({"addLabelIds": ["Label_8599665852067061281"]});
-      Http.send(body);
-      Http.onreadystatechange = async (e) => {
-          if (Http.readyState == 4 && Http.status == 200) {
-              response = JSON.parse(Http.response);
-              console.log(response);
-          }
-      }
+        let Http = new XMLHttpRequest();
+        query = "/messages/185ea543e8b85742/modify"
+        const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
+        Http.open("POST", url);
+        Http.setRequestHeader("Content-Type", "application/json");
+        Http.setRequestHeader("Authorization", `Bearer ${token}`);
+        // Http.setRequestHeader("Access-Control-Allow-Origin", "*");
+        // Http.setRequestHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Auth-Token");
+        // Http.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+        body = JSON.stringify({ "addLabelIds": ["Label_8599665852067061281"] });
+        Http.send(body);
+        Http.onreadystatechange = async (e) => {
+            if (Http.readyState == 4 && Http.status == 200) {
+                response = JSON.parse(Http.response);
+                console.log(response);
+            }
+        }
     }
 
     function createLabel(token, labelName) {
-      let Http = new XMLHttpRequest();
-      const url = 'https://gmail.googleapis.com/gmail/v1/users/me/labels';
-      Http.open("POST", url);
-      Http.setRequestHeader("Content-Type", "application/json");
-      Http.setRequestHeader("Authorization", `Bearer ${token}`);
-      body = JSON.stringify({"name": labelName,
-                              "messageListVisibility": "show",
-                              "labelListVisibility": "labelShow",
-                            });
-      Http.send(body);
-      Http.onreadystatechange = async (e) => {
-          if (Http.readyState == 4 && Http.status == 200) {
-              response = JSON.parse(Http.response);
-              console.log(response);
-          }
-      }
+        let Http = new XMLHttpRequest();
+        const url = 'https://gmail.googleapis.com/gmail/v1/users/me/labels';
+        Http.open("POST", url);
+        Http.setRequestHeader("Content-Type", "application/json");
+        Http.setRequestHeader("Authorization", `Bearer ${token}`);
+        body = JSON.stringify({
+            "name": labelName,
+            "messageListVisibility": "show",
+            "labelListVisibility": "labelShow",
+        });
+        Http.send(body);
+        Http.onreadystatechange = async (e) => {
+            if (Http.readyState == 4 && Http.status == 200) {
+                response = JSON.parse(Http.response);
+                console.log(response);
+            }
+        }
     }
 
     // Retrieves message id of first 10 emails in inbox
@@ -145,7 +175,7 @@ var finishedWhile = 0;
             for (let i = 0; i < response_json.messages.length; i += 1) {
                 console.log(response_json.messages[i].id);
             }
-    }).catch((error) => {console.error(error.message)}).then();
+        }).catch((error) => { console.error(error.message) }).then();
     }
 
 
@@ -162,7 +192,7 @@ var finishedWhile = 0;
                 }
 
             }
-        }).catch((error) => {console.error(error.message)}).then();
+        }).catch((error) => { console.error(error.message) }).then();
     }
     // returns the label id of the label with the specified name. 
     function getLabelId(name) {
@@ -189,7 +219,102 @@ var finishedWhile = 0;
             });;
         });
     }
+    // main function loop that sends emails to dynamodb
+    const sendEmailToSagemaker = () => {
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            let get_label_id_arr = [];
+            get_label_id_arr.push(listLabelId(token));
+            nomailDict = {};
+            Promise.all(get_label_id_arr).then((response) => {
+                if (Object.keys(nomailDict).length == nomailLabels.length) {
+                    return nomailDict;
+                }
+                let labelArr = JSON.parse(response[0])
+                for (i = 0; i < labelArr.labels.length; i++) {
+                    if (nomailLabels.includes(labelArr.labels[i].name)) {
+                        nomailDict[labelArr.labels[i].name] = labelArr.labels[i].id;
+                    }
+                }
+                if (Object.keys(nomailDict).length == nomailLabels.length) {
+                    return nomailDict;
+                } else {
+                    throw new Error("Label not found")
+                };
+            }).then((response) => {
+                let get_email_arr = [];
+                //TODO need to get email promise to
+                get_email_arr.push(
+                    getEmailPromise(
+                        `/messages?maxResults=100&q=in:inbox has:nouserlabels older_than:3d`,
+                        "GET",
+                        token
+                        )
+                    );
+                    return Promise.all(get_email_arr);
+                }).then((response) => {
+                    get_email_info_arr = [];
+                    keepResponseArray = JSON.parse(response[0]);
+                    let keepLength = 0;
+                    if (keepResponseArray.messages) {
+                        keepLength = keepResponseArray.messages.length;
+                    }
+                    // const loadingDiv = document.getElementById('loading');
+                    // loadingDiv.textContent = `Loading...${keepLength} emails`;
+                    console.log("response Array Length: ", keepResponseArray.messages.length);
+                    if (keepResponseArray.messages){
+                        for (i = 0; i < keepResponseArray.messages.length; i++) {
+                            emailId = keepResponseArray.messages[i].id;
+                            get_email_info_arr.push(
+                                getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
+                            );
+                        }
+                    }   
+                    console.log("get_email_info_arr:",get_email_info_arr.length)
+                    emails_to_sagemaker = keepResponseArray.messages;
+                    return Promise.all(get_email_info_arr);
+                })
+                .then((response2) => {
 
+                    jsons_to_sagemaker_arr = [];
+                    for (i = 0; i < response2.length; i++) {
+                        jsons_to_sagemaker_arr.push(getEmailJson(response2[i]));
+                    }
+                    return Promise.all(sendEmails(jsons_to_sagemaker_arr, "send_data_s3"));
+                })
+                .then((response3) => {
+                    prevtime = Date.now();
+                    console.log(response3);
+                    console.log(JSON.parse(response3[0]));
+                    for (i=0;i < response3.length; i++){
+                        email_pred = JSON.parse(response3[i]);
+                        console.log("email pred:",email_pred)
+                        let email_pred_trash = [];
+                        let email_pred_inbox = [];
+                        for (n = 0; n< email_pred.length; n++){
+                            let email_id = emails_to_sagemaker[n + i*25].id;
+                            console.log(n+i*25,":",email_id)
+                            if (email_pred[n] == 1){
+                                email_pred_trash.push(email_id);
+                                
+                            } else {
+                                email_pred_inbox.push(email_id);
+                                
+                            }
+                        }
+                        batchModifyLabels(email_pred_trash,[nomailDict["nomail_trash"]], []);
+                        batchModifyLabels(email_pred_inbox,[nomailDict["nomail_inbox"]], []);
+                    }
+                    console.log("finished")
+                    document.getElementById('loading').textContent = 'Finished';
+
+                })
+                .catch((error) => {
+                    // currtime = -1;
+                    console.log("sendemails error");
+                    console.error(error.message);
+                });
+        });
+    };
     // main function loop that sends emails to dynamodb
     const sendEmailToDynamodb = () => {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
@@ -222,7 +347,7 @@ var finishedWhile = 0;
                     );
                     get_email_arr.push(
                         getEmailPromise(
-                            `/messages?maxResults=500&includeSpamTrash=true&q=in:trash has:nouserlabels`,
+                            `/messages?maxResults=500&includeSpamTrash=true&q=in:trash NOT label:nomail_delete`,
                             "GET",
                             token
                         )
@@ -273,7 +398,7 @@ var finishedWhile = 0;
                     for (i = 0; i < response2.length; i++) {
                         jsons_to_dynamodb_arr.push(getEmailJson(response2[i]));
                     }
-                    return Promise.all(sendEmails(jsons_to_dynamodb_arr));
+                    return Promise.all(sendEmails(jsons_to_dynamodb_arr, "send_data"));
                 })
                 .then((response3) => {
                     prevtime = Date.now();
@@ -349,23 +474,23 @@ var finishedWhile = 0;
         };
     }
     // list takes in the full list of emails in the trash bin and returns a list of promises
-    function sendEmails(list) {
+    function sendEmails(list,resource) {
         // iterates through every 25 emails and sends them to the backend
         let emailPromiseArr = [];
         for (let i = 0; i < list.length; i += 25) {
             let first_index = i;
             let last_index = Math.min(i + 25, list.length);
             let emailjsons = list.slice(first_index, last_index);
-        emailPromiseArr.push(sendEmailPromise(emailjsons));
+            emailPromiseArr.push(sendEmailPromise(emailjsons,resource));
         }
         return emailPromiseArr;
     }
     // creates a promise with max 25 emails and returns it
-    function sendEmailPromise(emailjsons) {
+    function sendEmailPromise(emailjsons, resource) {
         return new Promise((resolve, reject) => {
         let Http = new XMLHttpRequest();
         const url =
-            "https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/send_data";
+            `https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/${resource}`;
         Http.open("POST", url);
         Http.setRequestHeader("Content-Type", "application/json");
         let body = {
@@ -419,7 +544,7 @@ var finishedWhile = 0;
                 if (removedLabelIdArr.length == 0) {
                     removedLabelIdArr = null;
                 }
-                body = JSON.stringify({"addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr});
+                body = JSON.stringify({ "addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr });
                 Http.send(body);
                 Http.onreadystatechange = async (e) => {
                     if (Http.readyState == 4 && Http.status == 200) {
@@ -431,6 +556,32 @@ var finishedWhile = 0;
         });
     }
 
+    //todo add batch modify labels, 
+
+    function batchModifyLabels(emailids, addedLabelIdArr, removedLabelIdArr){
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            let Http = new XMLHttpRequest();
+            query = `/messages/batchModify`
+            const url = 'https://gmail.googleapis.com/gmail/v1/users/me' + query;
+            Http.open("POST", url);
+            Http.setRequestHeader("Content-Type", "application/json");
+            Http.setRequestHeader("Authorization", `Bearer ${token}`);
+            if (removedLabelIdArr.length == 0) {
+                body = JSON.stringify({ids: emailids, "addLabelIds": addedLabelIdArr });
+            } else {
+                body = JSON.stringify({ ids: emailids,"addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr });
+            }
+            Http.send(body);
+            // Http.onreadystatechange = async (e) => {
+            //     if (Http.readyState == 4 && Http.status == 200) {
+            //         response = JSON.parse(Http.response);
+            //         console.log(response);
+            //     }
+            // }
+        });
+    }
+
+
     function modifyLabels(emailid, addedLabelIdArr, removedLabelIdArr) {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
             let Http = new XMLHttpRequest();
@@ -440,9 +591,9 @@ var finishedWhile = 0;
             Http.setRequestHeader("Content-Type", "application/json");
             Http.setRequestHeader("Authorization", `Bearer ${token}`);
             if (removedLabelIdArr.length == 0) {
-                body = JSON.stringify({"addLabelIds": addedLabelIdArr});
+                body = JSON.stringify({ "addLabelIds": addedLabelIdArr });
             } else {
-                body = JSON.stringify({"addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr});
+                body = JSON.stringify({ "addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr });
             }
             Http.send(body);
             // Http.onreadystatechange = async (e) => {
@@ -478,49 +629,6 @@ var finishedWhile = 0;
             };
             Http.onerror = () => reject(Http.statusText);
         });
-    }
-
-    // takes in list of emails, list of label ids to add
-    function modifyLabelList(list, labelids) {
-        chrome.identity.getAuthToken({ interactive: true }, function (token) {
-            let promiselist = [];
-            for (let i = 0; i < list.length; i++) {
-                promiselist.push(modifyLabels(list[i].id, labelids, []));
-            }
-            Promise.all(get_label_id_arr).then((response) => {
-                console.log(response);
-            })
-        });
-    }
-
-    // returns a new promise when given a list of emailJsons.
-    function sendEmailPromise2(emailjsons, url) {
-        return new Promise((resolve, reject) => {
-        let Http = new XMLHttpRequest();
-        Http.open("POST", url);
-        Http.setRequestHeader("Content-Type", "application/json");
-        let body = {
-            emails: emailjsons,
-        };
-
-        Http.send(JSON.stringify(body));
-        Http.onload = () => {
-            if (Http.status >= 200 && Http.status < 300) {
-            resolve(Http.response);
-            } else {
-            reject(Http.statusText);
-            }
-        };
-        Http.onerror = () => reject(Http.statusText);
-        });
-    }
-
-    // emailPromiseArr contains 
-    function sendEmails2(list, url) {
-        // iterates through every 25 emails and sends them to the backend
-        let emailPromiseArr = [];
-        emailPromiseArr.push(sendEmailPromise2(list, url));
-        return emailPromiseArr;
     }
 
     // alex + lucy merge end
