@@ -40,6 +40,10 @@ h3 {
   font-weight: normal;
 }
 
+.days-input {
+  width: 40px;
+}
+
 .link {
   cursor: pointer;
   text-decoration: none;
