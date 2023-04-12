@@ -9,11 +9,27 @@ var emails_to_sagemaker = [];
 (() => {
     document.addEventListener("DOMContentLoaded", async function () {
         var btn = document.getElementById("testButton");
+        var optionsBtn = document.getElementById("options");
+        optionsBtn.addEventListener("click", openOptions);
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
         btn.addEventListener("click", buttonSendDataSagemaker);
         var btn2 = document.getElementById("testButton2");
         btn2.addEventListener("click", buttonSendData);
+
+        var toggle = localStorage.getItem("button");
+        if (toggle === null) {
+            // default send to sagemaker
+            localStorage.setItem("button", "send");
+            btn2.style.display = 'none';
+        } else {
+            var send = toggle === "send" ? true : false;
+            if (send) {
+                btn2.style.display = 'none';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
         // btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
@@ -241,10 +257,12 @@ var emails_to_sagemaker = [];
                 };
             }).then((response) => {
                 let get_email_arr = [];
+                let daysOld = localStorage.getItem("days") || "3";
+                let threshold = localStorage.getItem("threshold") || "100";
                 //TODO need to get email promise to
                 get_email_arr.push(
                     getEmailPromise(
-                        `/messages?maxResults=100&q=in:inbox has:nouserlabels older_than:3d`,
+                        `/messages?maxResults=${threshold}&q=in:inbox has:nouserlabels older_than:${daysOld}d`,
                         "GET",
                         token
                         )
