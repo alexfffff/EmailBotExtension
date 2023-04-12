@@ -6,9 +6,15 @@
       window.location.href = "popup.html";
     });
 
+    let {
+      button: button,
+      days: days,
+      threshold: threshold,
+    } = { ...localStorage };
+
     var toggle = document.getElementById("send");
-    var checked = localStorage.getItem("button") === "send" ? true : false;
-    if (localStorage.getItem("button") !== null) {
+    var checked = button === "send" ? true : false;
+    if (button !== null) {
       toggle.checked = checked;
     } else {
       localStorage.setItem("button", "send");
@@ -20,18 +26,16 @@
     });
 
     var daysInput = document.getElementById("days");
-    var daysOld = localStorage.getItem("days");
-    if (daysOld === null) {
+    if (days === null) {
       localStorage.setItem("days", "3");
     }
-    daysInput.value = daysOld || "3";
+    daysInput.value = days || "3";
 
     daysInput.addEventListener("change", function () {
       localStorage.setItem("days", this.value);
     });
 
     var thresholdInput = document.getElementById("threshold");
-    var threshold = localStorage.getItem("threshold");
     if (threshold === null) {
       localStorage.setItem("threshold", "100");
     }
