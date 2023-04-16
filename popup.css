@@ -16,7 +16,7 @@ body {
   align-items: center;
   color: rgb(14, 14, 14);
   font-size: 30px;
-  background-color: rgb(255, 255, 255);
+  background-color: #F7F9F6;
   border-radius: 15px;
   font-family: Tajawal;
   margin: 0;
@@ -47,7 +47,6 @@ body {
   display: flex;
   flex-direction: column;
   margin-top: 15px;
-  background: #eef0f8;
   border-radius: 10px;
 }
 
@@ -58,6 +57,15 @@ body {
   flex-direction: row;
   justify-content: space-between;
   transition: 0.1s ease-out 30ms;
+}
+
+.info--details.option-1,
+.info--details.option-3 {
+  background: #D7E0DC;
+}
+
+.info--details.option-2 {
+  background: #F7F9F6;
 }
 
 .info--details:hover {
@@ -81,6 +89,7 @@ body {
   padding: 0px 17px;
   justify-content: space-between;
   margin-bottom: -18px;
+  width: 85%;
 }
 
 .link {

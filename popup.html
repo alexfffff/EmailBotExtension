@@ -1,50 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NoMail</title>
-    <link rel="stylesheet" href="popup.css" />
-  </head>
 
-  <!-- refer to popup_script.js to update values with data from backend -->
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoMail</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
 
-  <body>
-    <div class="popup-content">
-        <div class="header">
-            <div class="title">nomail
-                <!-- ADD FUNCTION TO TEST HERE -->
-                <button id="testButton">send</button> <!-- sending to sage maker machine learning actual prediction change to refresh icon -->
-                <button id="testButton2">send2</button> <!-- sending to dynamodb testing function training prototype -->
-            </div>
-            <div class="email" id="email-address">loading...</div>
-        </div>
-        <div class="email" id="email-address">loading...</div>
+<!-- refer to popup_script.js to update values with data from backend -->
+
+<body>
+  <div class="popup-content">
+    <div class="header">
+      <div class="title">Σorte
+        <!-- ADD FUNCTION TO TEST HERE -->
+        <button id="testButton">send</button>
+        <!-- sending to sage maker machine learning actual prediction change to refresh icon -->
+        <button id="testButton2">send2</button> <!-- sending to dynamodb testing function training prototype -->
       </div>
-      <div class="info">
-        <div class="info--title">this week</div>
-        <div class="info--details">
-          emails in review:
-          <div id="review-email-num">loading...</div>
-        </div>
-        <div class="info--details">
-          emails detected
-          <div id="detected-email-num">loading...</div>
-        </div>
-        <div class="info--details">
-          emails deleted
-          <div id="deleted-email-num">loading...</div>
-        </div>
+      <div class="email" id="email-address">loading...</div>
+    </div>
+    <div class="info">
+      <div class="info--title">this week</div>
+      <div class="info--details option-1">
+        emails in review:
+        <div id="review-email-num">loading...</div>
       </div>
-      <div class="options">
-        <a class="link" href="./options.html">review list</a>
-        <a class="link" id="options">options/analytics</a>
+      <div class="info--details option-2">
+        emails detected
+        <div id="detected-email-num">loading...</div>
+      </div>
+      <div class="info--details option-3">
+        emails deleted
+        <div id="deleted-email-num">loading...</div>
       </div>
     </div>
-    <!-- test functions from contentscripts in popuplhtml -->
-    <script src="./contentScripts.js"></script>
-    <script src="./popup_script.js"></script>
+  </div>
+  <div class="options">
+    <a class="link" href="./options.html">review list</a>
+    <a class="link" id="options">options/analytics</a>
+  </div>
+  
+  <!-- test functions from contentscripts in popuplhtml -->
+  <script src="./contentScripts.js"></script>
+  <script src="./popup_script.js"></script>
 </body>
 
 </html>
