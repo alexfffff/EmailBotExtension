@@ -11,7 +11,7 @@
 }
 
 body {
-  width: 750px;
+  width: 450px;
   height: 600px;
   display: flex;
   flex-direction: row;
@@ -20,7 +20,7 @@ body {
 
   color: #37393b;
   font-family: Tajawal;
-  background-color: #effcff;
+  background-color: #e0ebf7;
   margin: auto;
   /* overflow: hidden; */
 }
@@ -41,6 +41,10 @@ h3 {
   margin: 0;
   padding-left: 32px;
   font-weight: normal;
+}
+
+.days-input {
+  width: 40px;
 }
 
 .link {
@@ -71,7 +75,8 @@ h3 {
   justify-content: space-evenly;
   height: 30%;
   margin: 50px;
-  background-color: #f6fffc;
+  background-color: #feffed;
+  border-radius: 10px;
 }
 
 .settings-container .content .threshold-container h2 {
@@ -85,10 +90,11 @@ h3 {
   justify-content: space-evenly;
   height: 30%;
   font-size: 32px;
-  background-color: #f6fffc;
+  background-color: #feffed;
   margin-left: 50px;
   margin-bottom: 50px;
   margin-right: 50px;
+  border-radius: 10px;
 }
 
 .settings-container .content .auto-delete-container h2 {
@@ -114,19 +120,21 @@ h3 {
   flex-direction: column;
   justify-content: space-evenly;
   height: 40%;
-  background-color: #f6fffc;
+  background-color: #feffed;
   margin-left: 50px;
   margin-bottom: 50px;
   margin-right: 50px;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 .settings-container .content .default-label-container h2 {
   height: 0px;
   margin-top: -12%;
+  font-size: 20px;
 }
 
 .settings-container {
-  width: 50%;
   height: 100%;
 }
 
@@ -157,7 +165,7 @@ h3 {
   flex-direction: column;
   justify-content: space-between;
   height: 60%;
-  background-color: #f6fffc;
+  background-color: #feffed;
   margin-top: 100px;
   margin-right: 50px;
   margin-bottom: 50px;
@@ -165,7 +173,7 @@ h3 {
 
 .metrics-container .numbers-container {
   height: 40%;
-  background-color: #f6fffc;
+  background-color: #feffed;
   margin-right: 50px;
   margin-bottom: 50px;
   display: flex;

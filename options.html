@@ -15,30 +15,46 @@
         <div class="threshold-container">
           <h2>threshold</h2>
           <h3>
-            lower limit
             <span class="custom-select" style="width: 150px">
-              <input type="number" min="30" max="90" step="2" value="50" />
+              <input
+                id="threshold"
+                type="number"
+                min="30"
+                max="200"
+                value="100"
+              />
             </span>
           </h3>
-          <h3>
+          <!-- <h3>
             upper limit
             <span class="custom-select">
               <input type="number" min="30" max="90" step="2" value="50" />
             </span>
-          </h3>
+          </h3> -->
         </div>
         <div class="auto-delete-container">
-          <h2>toggle auto delete</h2>
+          <h2>email options</h2>
           <h3>
             <label class="container">
-              <input type="checkbox" checked="checked" />
+              <input id="send" type="checkbox" />
               <span class="checkmark"></span>
-              <p>move spam mail straight to trash without review</p>
+              <p>deliver emails to be predicted</p>
             </label>
           </h3>
         </div>
         <div class="default-label-container">
-          <h2>change default nomail inbox</h2>
+          <h2>
+            select emails older than
+            <input
+              id="days"
+              min="3"
+              max="60"
+              class="days-input"
+              type="number"
+              value="3"
+            />
+            days
+          </h2>
           <!-- TODO: FILL OUT OPTIONS WITH EXISTING LABELS -->
           <!-- <form class="label-form">
             <select name="label" id="labels">
@@ -52,7 +68,7 @@
       </div>
       <a class="link" id="popup">back</a>
     </div>
-    <div class="metrics-container">
+    <!-- <div class="metrics-container">
       <div class="graph-container">
         <h2>view from ___ to ____</h2>
         <div class="graph"></div>
@@ -64,7 +80,7 @@
         <h3 class="metric-row">total spam identified</h3>
         <h3 class="metric-row">false detected emails</h3>
       </div>
-    </div>
+    </div> -->
 
     <script src="./options_script.js"></script>
   </body>
