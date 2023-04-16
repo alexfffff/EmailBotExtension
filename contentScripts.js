@@ -5,23 +5,31 @@ var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent", "nomail_
 var prevtime = 0;
 var currtime = 0;
 var finishedWhile = 0;
+var labelIdent = "";
 var emails_to_sagemaker = [];
 (() => {
     document.addEventListener("DOMContentLoaded", async function () {
         var btn = document.getElementById("testButton");
+        var optionsBtn = document.getElementById("options");
+        optionsBtn.addEventListener("click", openOptions);
         // function to run below
         // btn.addEventListener("click", sendEmailToDynamodb);
         btn.addEventListener("click", buttonSendDataSagemaker);
+        //console.log("hello");
+        //getLabelId("nomail_keep");
+        //console.log(labelIdent);
+        //getLabelEmailCount2('Label_8');
         var btn2 = document.getElementById("testButton2");
-        console.log("hello");
         btn2.addEventListener("click", buttonSendData);
         // btn.addEventListener("click", messageTest);
         chrome.identity.getAuthToken({interactive: true}, function(token) {
           checkNomailLabel(token);
+          console.log("this is a test");
+          //console.log(nomailDict["nomail_keep"]);
+          //getLabelEmailCount2(token, nomailDict["nomail_keep"]);
         });
 
     });
-
 
     const buttonSendDataSagemaker = async () => {
         const headerElement = document.getElementsByClassName('header')[0];
@@ -150,11 +158,30 @@ var emails_to_sagemaker = [];
         Http.open("POST", url);
         Http.setRequestHeader("Content-Type", "application/json");
         Http.setRequestHeader("Authorization", `Bearer ${token}`);
-        body = JSON.stringify({
-            "name": labelName,
-            "messageListVisibility": "show",
-            "labelListVisibility": "labelShow",
-        });
+        body = JSON.stringify({"name": labelName,
+                                "messageListVisibility": "show",
+                                "labelListVisibility": "labelShow",
+                              });
+        if (labelName === "nomail_inbox") {
+            body = JSON.stringify({"name": labelName,
+                  "messageListVisibility": "show",
+                  "labelListVisibility": "labelShow",
+                  "color": {
+                      "textColor": "#ffffff",
+                      "backgroundColor": "#a2dcc1"
+                  },
+                  });
+        }
+        if (labelName === "nomail_trash") {
+            body = JSON.stringify({"name": labelName,
+                  "messageListVisibility": "show",
+                  "labelListVisibility": "labelShow",
+                  "color": {
+                      "textColor": "#ffffff",
+                      "backgroundColor": "#ac2b16"
+                  },
+                  });
+        }
         Http.send(body);
         Http.onreadystatechange = async (e) => {
             if (Http.readyState == 4 && Http.status == 200) {
@@ -162,7 +189,7 @@ var emails_to_sagemaker = [];
                 console.log(response);
             }
         }
-    }
+      }
 
     // Retrieves message id of first 10 emails in inbox
     function getMessageId(authToken) {
@@ -195,21 +222,26 @@ var emails_to_sagemaker = [];
         }).catch((error) => { console.error(error.message) }).then();
     }
     // returns the label id of the label with the specified name. 
-    function getLabelId(name) {
+    function getLabelId(name1, name2, name3) {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
             let promiseArr = [];
+            let dict = {};
             promiseArr.push(listLabelId(token));
             Promise.all(promiseArr).then((response) => {
                 let labelArr = JSON.parse(response[0])
                 for (i = 0; i < labelArr.labels.length; i++) {
-                    if (labelArr.labels[i].name === name) {
-                        return labelArr.labels[i].id;
+                    if (labelArr.labels[i].name === name1 || labelArr.labels[i].name === name2 || labelArr.labels[i].name === name3) {
+                        //return labelArr.labels[i].id;
+                        dict[labelArr.labels[i].name] = labelArr.labels[i].id;
                     }
                 }
-                throw new Error("Label not found");
+                if (dict.length == 0) {
+                    throw new Error("Label not found");
+                }
+                return dict;
             }).then((response) => {
 
-
+                labelIdent = response;
                 console.log("getLabelID success");
                 console.log(response);
                 return response;
