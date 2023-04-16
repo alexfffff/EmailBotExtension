@@ -12,13 +12,13 @@ body {
   height: 345px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  color: rgb(14, 14, 14);
+  color: #363A43;
   font-size: 30px;
   background-color: #F7F9F6;
   border-radius: 15px;
-  font-family: Tajawal;
+  font-family: Tajawal, sans-serif;
   margin: 0;
 }
 
@@ -26,7 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 80vh;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
 }
 
@@ -72,6 +72,7 @@ body {
   padding: 10px 30px;
   border-radius: 10px;
   background: #d8dbee;
+  cursor: default;
 }
 
 .info--title {
@@ -88,8 +89,9 @@ body {
   margin-top: 10px;
   padding: 0px 17px;
   justify-content: space-between;
-  margin-bottom: -18px;
+  margin-bottom: 0px;
   width: 85%;
+  color: #636B68;
 }
 
 .link {

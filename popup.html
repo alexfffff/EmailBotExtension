@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NoMail</title>
   <link rel="stylesheet" href="popup.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
 </head>
 
 <!-- refer to popup_script.js to update values with data from backend -->
@@ -23,7 +26,7 @@
       <div class="email" id="email-address">loading...</div>
     </div>
     <div class="info">
-      <div class="info--title">this week</div>
+      <div class="info--title">past 3 days</div>
       <div class="info--details option-1">
         emails in review:
         <div id="review-email-num">loading...</div>
@@ -42,7 +45,7 @@
     <a class="link" href="./options.html">review list</a>
     <a class="link" id="options">options/analytics</a>
   </div>
-  
+
   <!-- test functions from contentscripts in popuplhtml -->
   <script src="./contentScripts.js"></script>
   <script src="./popup_script.js"></script>

@@ -50,11 +50,11 @@ var emails_to_sagemaker = [];
         if (document.getElementById('loading') == null) {
             const loadingDiv = document.createElement("div");
             loadingDiv.id = 'loading';
-            loadingDiv.textContent = 'Loading...';
+            loadingDiv.textContent = 'sending...';
             headerElement.appendChild(loadingDiv);
         } else {
             const loadingDiv = document.getElementById('loading');
-            loadingDiv.textContent = 'Loading...';
+            loadingDiv.textContent = 'sending...';
         }
         sendEmailToSagemaker();
     }
@@ -67,11 +67,11 @@ var emails_to_sagemaker = [];
         if (document.getElementById('loading') == null) {
             const loadingDiv = document.createElement("div");
             loadingDiv.id = 'loading';
-            loadingDiv.textContent = 'Loading...';
+            loadingDiv.textContent = 'sending...';
             headerElement.appendChild(loadingDiv);
         } else {
             const loadingDiv = document.getElementById('loading');
-            loadingDiv.textContent = 'Loading...';
+            loadingDiv.textContent = 'sending...';
         }
 
         prevtime = Date.now();
@@ -87,7 +87,7 @@ var emails_to_sagemaker = [];
             currtime = prevtime;
             prevtime = temp;
         }
-        document.getElementById('loading').textContent = 'Finished'
+        document.getElementById('loading').textContent = 'done'
         console.log("finished buttonWrapper");
         finishedWhile = 0;
     }
@@ -415,7 +415,7 @@ var emails_to_sagemaker = [];
                     }
                     console.log(" number of emails remaining", keepLength, deleteLength);
                     const loadingDiv = document.getElementById('loading');
-                    loadingDiv.textContent = `Loading...${keepLength + deleteLength} emails`;
+                    loadingDiv.textContent = `sending...${keepLength + deleteLength} emails`;
                     if ((keepLength + deleteLength) < 25) {
                         console.log("finished this round");
                         finishedWhile = -1;
