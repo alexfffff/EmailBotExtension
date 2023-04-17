@@ -1,7 +1,7 @@
 //// alex+lucy
 var pageTokenlist = [];
 var nomailDict = {};
-var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent", "nomail_trash", "nomail_inbox"];
+var nomailLabels = ["sorte_keep", "sorte_delete", "sorte_keep_sent", "sorte trash", "sorte inbox"];
 var prevtime = 0;
 var currtime = 0;
 var finishedWhile = 0;
@@ -176,7 +176,7 @@ var emails_to_sagemaker = [];
             "messageListVisibility": "show",
             "labelListVisibility": "labelShow",
         });
-        if (labelName === "nomail_inbox") {
+        if (labelName === "sorte inbox") {
             body = JSON.stringify({
                 "name": labelName,
                 "messageListVisibility": "show",
@@ -187,7 +187,7 @@ var emails_to_sagemaker = [];
                 },
             });
         }
-        if (labelName === "nomail_trash") {
+        if (labelName === "sorte trash") {
             body = JSON.stringify({
                 "name": labelName,
                 "messageListVisibility": "show",
@@ -351,8 +351,8 @@ var emails_to_sagemaker = [];
 
                             }
                         }
-                        batchModifyLabels(email_pred_trash, [nomailDict["nomail_trash"]], []);
-                        batchModifyLabels(email_pred_inbox, [nomailDict["nomail_inbox"]], []);
+                        batchModifyLabels(email_pred_trash, [nomailDict["sorte trash"]], []);
+                        batchModifyLabels(email_pred_inbox, [nomailDict["sorte inbox"]], []);
                     }
                     document.getElementById('img-icon').src = 'https://img.icons8.com/material-outlined/512/checked.png';
                     setTimeout(function () {
@@ -392,14 +392,14 @@ var emails_to_sagemaker = [];
                 let get_email_arr = [];
                 get_email_arr.push(
                     getEmailPromise(
-                        `/messages?maxResults=500&includeSpamTrash=true&q=in:inbox&labelIds=${nomailDict["nomail_keep"]}`,
+                        `/messages?maxResults=500&includeSpamTrash=true&q=in:inbox&labelIds=${nomailDict["sorte_keep"]}`,
                         "GET",
                         token
                     )
                 );
                 get_email_arr.push(
                     getEmailPromise(
-                        `/messages?maxResults=500&includeSpamTrash=true&q=in:trash NOT label:nomail_delete`,
+                        `/messages?maxResults=500&includeSpamTrash=true&q=in:trash NOT label:sorte_delete`,
                         "GET",
                         token
                     )
@@ -428,7 +428,7 @@ var emails_to_sagemaker = [];
                 if (keepResponseArray.messages) {
                     for (i = 0; i < Math.min(25, keepLength); i++) {
                         emailId = keepResponseArray.messages[i].id;
-                        modifyLabels(emailId, [nomailDict["nomail_keep_sent"]], [nomailDict["nomail_keep"]]);
+                        modifyLabels(emailId, [nomailDict["sorte_keep_sent"]], [nomailDict["sorte_keep"]]);
                         get_email_info_arr.push(
                             getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
                         );
@@ -439,7 +439,7 @@ var emails_to_sagemaker = [];
                     if (deleteResponseArray.messages) {
                         for (i = 0; i < Math.min(25 - curr_emails, deleteLength); i++) {
                             emailId = deleteResponseArray.messages[i].id;
-                            modifyLabels(emailId, [nomailDict["nomail_delete"]], [])
+                            modifyLabels(emailId, [nomailDict["sorte_delete"]], [])
                             get_email_info_arr.push(
                                 getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
                             );

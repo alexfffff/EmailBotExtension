@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
-  const number_dummy = await getLabelEmailCount2("nomail_inbox", "nomail_trash");
+  const number_dummy = await getLabelEmailCount2("sorte inbox", "sorte trash");
   await new Promise(r => setTimeout(r, 3000));
   console.log("number: " + number);
   toReviewNum.innerText = number + number2;
@@ -121,7 +121,7 @@ function getLabelEmailCount2(labelId, labelId2) {//}= async (authToken, labelId)
           }).then((response) => {
               console.log("this is a test here 2");
               response_json = JSON.parse(response[0]);
-              console.log("Emails in nomail_trash: " + response_json.messagesTotal);
+              console.log("Emails in sorte trash: " + response_json.messagesTotal);
               number2 = response_json.messagesTotal;
               //return response_json.messagesTotal;
 
