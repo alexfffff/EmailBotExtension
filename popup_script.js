@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   var emailAddress = document.getElementById("email-address");
   var toReviewNum = document.getElementById("review-email-num");
   var detectedNum = document.getElementById("detected-email-num");
-  var deletedNum = document.getElementById("deleted-email-num");
+  var deletedNum = document.getElementById("tbd-email-num");
 
   chrome.identity.getAuthToken({ interactive: true }, async function (token) {
     //const email_ids = await getLabelId("nomail_keep", "nomail_delete", "nomail_inbox");
@@ -37,9 +37,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   const number_dummy = await getLabelEmailCount2("nomail_inbox", "nomail_trash");
-  await new Promise(r => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 2000));
   console.log("number: " + number);
-  toReviewNum.innerText = number;
+  toReviewNum.innerText = number + number2;
   detectedNum.innerText = number2;
   deletedNum.innerText = number3 - number - number2;
 });
