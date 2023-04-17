@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     //checkNomailLabel(token);
 
     var links = document.getElementsByTagName("a");
-    for (var i = 0; i < links.length; i++) {
+    for (var i = 0; i < links.length-1; i++) {
         (function () {
             var ln = links[i];
             var location = ln.href;

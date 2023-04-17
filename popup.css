@@ -32,6 +32,7 @@ body {
 
 .header {
   text-align: center;
+  cursor: default;
 }
 
 .title {
@@ -59,6 +60,7 @@ body {
   flex-direction: column;
   margin-top: 15px;
   border-radius: 10px;
+  cursor: default;
 }
 
 .info--details {
@@ -81,8 +83,8 @@ body {
 
 .info--details:hover {
   padding: 10px 30px;
-  border-radius: 10px;
-  background: #d8dbee;
+  background: #6D867A;
+  color: #E8E4E3;
   cursor: default;
 }
 
