@@ -9,7 +9,7 @@ var labelIdent = "";
 var emails_to_sagemaker = [];
 (() => {
     document.addEventListener("DOMContentLoaded", async function () {
-        var btn = document.getElementById("testButton");
+        var btn = document.getElementById("upload-mail-button");
         var optionsBtn = document.getElementById("options");
         optionsBtn.addEventListener("click", openOptions);
         // function to run below
@@ -19,7 +19,7 @@ var emails_to_sagemaker = [];
         //getLabelId("nomail_keep");
         //console.log(labelIdent);
         //getLabelEmailCount2('Label_8');
-        var btn2 = document.getElementById("testButton2");
+        var btn2 = document.getElementById("upload-mail-button-2");
         btn2.addEventListener("click", buttonSendData);
 
         var toggle = localStorage.getItem("button");
@@ -36,49 +36,44 @@ var emails_to_sagemaker = [];
             }
         }
         // btn.addEventListener("click", messageTest);
-        chrome.identity.getAuthToken({interactive: true}, function(token) {
-          checkNomailLabel(token);
-          console.log("this is a test");
-          //console.log(nomailDict["nomail_keep"]);
-          //getLabelEmailCount2(token, nomailDict["nomail_keep"]);
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            checkNomailLabel(token);
+            console.log("this is a test");
+            //console.log(nomailDict["nomail_keep"]);
+            //getLabelEmailCount2(token, nomailDict["nomail_keep"]);
         });
 
     });
 
     const buttonSendDataSagemaker = async () => {
-        const headerElement = document.getElementsByClassName('header')[0];
-        if (document.getElementById('loading') == null) {
-            const loadingDiv = document.createElement("div");
-            loadingDiv.id = 'loading';
-            loadingDiv.textContent = 'sending...';
-            headerElement.appendChild(loadingDiv);
+        if (document.getElementById('img-icon').src != "https://upload.wikimedia.org/wikipedia/commons/a/a3/Lightness_rotate_36f_cw.gif") {
+            const imgIcon = document.getElementById('img-icon');
+            imgIcon.src = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Lightness_rotate_36f_cw.gif";
         } else {
-            const loadingDiv = document.getElementById('loading');
-            loadingDiv.textContent = 'sending...';
+            const imgIcon = document.getElementById('img-icon');
+            imgIcon.src = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Lightness_rotate_36f_cw.gif";
         }
         sendEmailToSagemaker();
     }
     function openOptions() {
         window.location.href = "options.html";
-      }
+    }
 
     const buttonSendData = async () => {
-        const headerElement = document.getElementsByClassName('header')[0];
-        if (document.getElementById('loading') == null) {
-            const loadingDiv = document.createElement("div");
-            loadingDiv.id = 'loading';
-            loadingDiv.textContent = 'sending...';
-            headerElement.appendChild(loadingDiv);
+        console.log("clicked");
+        if (document.getElementById('img-icon-2').src != "https://upload.wikimedia.org/wikipedia/commons/a/a3/Lightness_rotate_36f_cw.gif") {
+            const imgIcon = document.getElementById('img-icon');
+            imgIcon.src = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Lightness_rotate_36f_cw.gif";
         } else {
-            const loadingDiv = document.getElementById('loading');
-            loadingDiv.textContent = 'sending...';
+            const imgIcon = document.getElementById('img-icon-2');
+            imgIcon.src = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Lightness_rotate_36f_cw.gif";
         }
 
         prevtime = Date.now();
         currtime = Date.now();
-        while (finishedWhile != -1 ) {
+        while (finishedWhile != -1) {
             sendEmailToDynamodb()
-            while (currtime >= prevtime){
+            while (currtime >= prevtime) {
                 console.log("in while loop");
                 await new Promise(r => setTimeout(r, 3000));
             }
@@ -87,14 +82,18 @@ var emails_to_sagemaker = [];
             currtime = prevtime;
             prevtime = temp;
         }
-        document.getElementById('loading').textContent = 'done'
+        document.getElementById('upload-mail-button').textContent = '';
+        document.getElementById('img-icon-2').src = 'https://img.icons8.com/material-outlined/512/checked.png';
+        setTimeout(function () {
+            document.getElementById('img-icon-2').src = 'https://img.icons8.com/windows/512/upload.png';
+        }, 3000);
         console.log("finished buttonWrapper");
         finishedWhile = 0;
     }
     const messageTest = async () => {
         chrome.identity.getAuthToken({ interactive: true }, async function (token) {
             // modifyLabelsPromise("185ead977885b9f3",["nomail"],[""]);
-            const response = await chrome.runtime.sendMessage({greeting: "hello"});
+            const response = await chrome.runtime.sendMessage({ greeting: "hello" });
             // do something with response here, not outside the function
             console.log(response);
         });
@@ -172,29 +171,32 @@ var emails_to_sagemaker = [];
         Http.open("POST", url);
         Http.setRequestHeader("Content-Type", "application/json");
         Http.setRequestHeader("Authorization", `Bearer ${token}`);
-        body = JSON.stringify({"name": labelName,
-                                "messageListVisibility": "show",
-                                "labelListVisibility": "labelShow",
-                              });
+        body = JSON.stringify({
+            "name": labelName,
+            "messageListVisibility": "show",
+            "labelListVisibility": "labelShow",
+        });
         if (labelName === "nomail_inbox") {
-            body = JSON.stringify({"name": labelName,
-                  "messageListVisibility": "show",
-                  "labelListVisibility": "labelShow",
-                  "color": {
-                      "textColor": "#ffffff",
-                      "backgroundColor": "#a2dcc1"
-                  },
-                  });
+            body = JSON.stringify({
+                "name": labelName,
+                "messageListVisibility": "show",
+                "labelListVisibility": "labelShow",
+                "color": {
+                    "textColor": "#ffffff",
+                    "backgroundColor": "#a2dcc1"
+                },
+            });
         }
         if (labelName === "nomail_trash") {
-            body = JSON.stringify({"name": labelName,
-                  "messageListVisibility": "show",
-                  "labelListVisibility": "labelShow",
-                  "color": {
-                      "textColor": "#ffffff",
-                      "backgroundColor": "#ac2b16"
-                  },
-                  });
+            body = JSON.stringify({
+                "name": labelName,
+                "messageListVisibility": "show",
+                "labelListVisibility": "labelShow",
+                "color": {
+                    "textColor": "#ffffff",
+                    "backgroundColor": "#ac2b16"
+                },
+            });
         }
         Http.send(body);
         Http.onreadystatechange = async (e) => {
@@ -203,7 +205,7 @@ var emails_to_sagemaker = [];
                 console.log(response);
             }
         }
-      }
+    }
 
     // Retrieves message id of first 10 emails in inbox
     function getMessageId(authToken) {
@@ -296,31 +298,31 @@ var emails_to_sagemaker = [];
                         `/messages?maxResults=${threshold}&q=in:inbox has:nouserlabels older_than:${daysOld}d`,
                         "GET",
                         token
-                        )
-                    );
-                    return Promise.all(get_email_arr);
-                }).then((response) => {
-                    get_email_info_arr = [];
-                    keepResponseArray = JSON.parse(response[0]);
-                    let keepLength = 0;
-                    if (keepResponseArray.messages) {
-                        keepLength = keepResponseArray.messages.length;
+                    )
+                );
+                return Promise.all(get_email_arr);
+            }).then((response) => {
+                get_email_info_arr = [];
+                keepResponseArray = JSON.parse(response[0]);
+                let keepLength = 0;
+                if (keepResponseArray.messages) {
+                    keepLength = keepResponseArray.messages.length;
+                }
+                // const loadingDiv = document.getElementById('loading');
+                // loadingDiv.textContent = `Loading...${keepLength} emails`;
+                console.log("response Array Length: ", keepResponseArray.messages.length);
+                if (keepResponseArray.messages) {
+                    for (i = 0; i < keepResponseArray.messages.length; i++) {
+                        emailId = keepResponseArray.messages[i].id;
+                        get_email_info_arr.push(
+                            getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
+                        );
                     }
-                    // const loadingDiv = document.getElementById('loading');
-                    // loadingDiv.textContent = `Loading...${keepLength} emails`;
-                    console.log("response Array Length: ", keepResponseArray.messages.length);
-                    if (keepResponseArray.messages){
-                        for (i = 0; i < keepResponseArray.messages.length; i++) {
-                            emailId = keepResponseArray.messages[i].id;
-                            get_email_info_arr.push(
-                                getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
-                            );
-                        }
-                    }   
-                    console.log("get_email_info_arr:",get_email_info_arr.length)
-                    emails_to_sagemaker = keepResponseArray.messages;
-                    return Promise.all(get_email_info_arr);
-                })
+                }
+                console.log("get_email_info_arr:", get_email_info_arr.length)
+                emails_to_sagemaker = keepResponseArray.messages;
+                return Promise.all(get_email_info_arr);
+            })
                 .then((response2) => {
 
                     jsons_to_sagemaker_arr = [];
@@ -333,27 +335,29 @@ var emails_to_sagemaker = [];
                     prevtime = Date.now();
                     console.log(response3);
                     console.log(JSON.parse(response3[0]));
-                    for (i=0;i < response3.length; i++){
+                    for (i = 0; i < response3.length; i++) {
                         email_pred = JSON.parse(response3[i]);
-                        console.log("email pred:",email_pred)
+                        console.log("email pred:", email_pred)
                         let email_pred_trash = [];
                         let email_pred_inbox = [];
-                        for (n = 0; n< email_pred.length; n++){
-                            let email_id = emails_to_sagemaker[n + i*25].id;
-                            console.log(n+i*25,":",email_id)
-                            if (email_pred[n] == 1){
+                        for (n = 0; n < email_pred.length; n++) {
+                            let email_id = emails_to_sagemaker[n + i * 25].id;
+                            console.log(n + i * 25, ":", email_id)
+                            if (email_pred[n] == 1) {
                                 email_pred_trash.push(email_id);
-                                
+
                             } else {
                                 email_pred_inbox.push(email_id);
-                                
+
                             }
                         }
-                        batchModifyLabels(email_pred_trash,[nomailDict["nomail_trash"]], []);
-                        batchModifyLabels(email_pred_inbox,[nomailDict["nomail_inbox"]], []);
+                        batchModifyLabels(email_pred_trash, [nomailDict["nomail_trash"]], []);
+                        batchModifyLabels(email_pred_inbox, [nomailDict["nomail_inbox"]], []);
                     }
-                    console.log("finished")
-                    document.getElementById('loading').textContent = 'Finished';
+                    document.getElementById('img-icon').src = 'https://img.icons8.com/material-outlined/512/checked.png';
+                    setTimeout(function () {
+                        document.getElementById('img-icon').src = 'https://img.icons8.com/windows/512/upload.png';
+                    }, 3000);
 
                 })
                 .catch((error) => {
@@ -391,60 +395,61 @@ var emails_to_sagemaker = [];
                         `/messages?maxResults=500&includeSpamTrash=true&q=in:inbox&labelIds=${nomailDict["nomail_keep"]}`,
                         "GET",
                         token
-                        )
-                    );
-                    get_email_arr.push(
-                        getEmailPromise(
-                            `/messages?maxResults=500&includeSpamTrash=true&q=in:trash NOT label:nomail_delete`,
-                            "GET",
-                            token
-                        )
-                    );
-                    return Promise.all(get_email_arr);
-                }).then((response) => {
-                    get_email_info_arr = [];
-                    keepResponseArray = JSON.parse(response[0]);
-                    deleteResponseArray = JSON.parse(response[1]);
-                    let keepLength = 0;
-                    let deleteLength = 0; 
-                    if (keepResponseArray.messages) {
-                        keepLength = keepResponseArray.messages.length;
-                    }
-                    if (deleteResponseArray.messages) {
-                        deleteLength = deleteResponseArray.messages.length;
-                    }
-                    console.log(" number of emails remaining", keepLength, deleteLength);
-                    const loadingDiv = document.getElementById('loading');
-                    loadingDiv.textContent = `sending...${keepLength + deleteLength} emails`;
-                    if ((keepLength + deleteLength) < 25) {
-                        console.log("finished this round");
-                        finishedWhile = -1;
-                    } 
-                    if (keepResponseArray.messages){
-                        for (i = 0; i < Math.min(25,keepLength); i++) {
-                            emailId = keepResponseArray.messages[i].id;
-                            modifyLabels(emailId,[nomailDict["nomail_keep_sent"]], [nomailDict["nomail_keep"]]);
-                            get_email_info_arr.push(
+                    )
+                );
+                get_email_arr.push(
+                    getEmailPromise(
+                        `/messages?maxResults=500&includeSpamTrash=true&q=in:trash NOT label:nomail_delete`,
+                        "GET",
+                        token
+                    )
+                );
+                return Promise.all(get_email_arr);
+            }).then((response) => {
+                get_email_info_arr = [];
+                keepResponseArray = JSON.parse(response[0]);
+                deleteResponseArray = JSON.parse(response[1]);
+                let keepLength = 0;
+                let deleteLength = 0;
+                if (keepResponseArray.messages) {
+                    keepLength = keepResponseArray.messages.length;
+                }
+                if (deleteResponseArray.messages) {
+                    deleteLength = deleteResponseArray.messages.length;
+                }
+                console.log(" number of emails remaining", keepLength, deleteLength);
+                const loadingDiv = document.getElementById('upload-mail-button');
+                loadingDiv.textContent = `sending...${keepLength + deleteLength} emails`;
+
+                if ((keepLength + deleteLength) < 25) {
+                    console.log("finished this round");
+                    finishedWhile = -1;
+                }
+                if (keepResponseArray.messages) {
+                    for (i = 0; i < Math.min(25, keepLength); i++) {
+                        emailId = keepResponseArray.messages[i].id;
+                        modifyLabels(emailId, [nomailDict["nomail_keep_sent"]], [nomailDict["nomail_keep"]]);
+                        get_email_info_arr.push(
                             getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
+                        );
+                    }
+                }
+                const curr_emails = get_email_info_arr.length
+                if (get_email_info_arr.length < 25) {
+                    if (deleteResponseArray.messages) {
+                        for (i = 0; i < Math.min(25 - curr_emails, deleteLength); i++) {
+                            emailId = deleteResponseArray.messages[i].id;
+                            modifyLabels(emailId, [nomailDict["nomail_delete"]], [])
+                            get_email_info_arr.push(
+                                getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
                             );
                         }
-                    }   
-                    const curr_emails = get_email_info_arr.length
-                    if (get_email_info_arr.length <25){
-                        if (deleteResponseArray.messages) {
-                            for (i = 0; i < Math.min(25- curr_emails,deleteLength); i++) {
-                                emailId = deleteResponseArray.messages[i].id;
-                                modifyLabels(emailId,[nomailDict["nomail_delete"]], [])
-                                get_email_info_arr.push(
-                                getEmailPromise(`/messages/${emailId}?format=full`, "GET", token)
-                                );
-                            }
-                        }
                     }
- 
-                    console.log("get_email_info_arr:",get_email_info_arr.length)
-                    return Promise.all(get_email_info_arr);
-                })
+                }
+
+                console.log("get_email_info_arr:", get_email_info_arr.length)
+                return Promise.all(get_email_info_arr);
+            })
                 .then((response2) => {
                     jsons_to_dynamodb_arr = [];
                     for (i = 0; i < response2.length; i++) {
@@ -526,28 +531,28 @@ var emails_to_sagemaker = [];
         };
     }
     // list takes in the full list of emails in the trash bin and returns a list of promises
-    function sendEmails(list,resource) {
+    function sendEmails(list, resource) {
         // iterates through every 25 emails and sends them to the backend
         let emailPromiseArr = [];
         for (let i = 0; i < list.length; i += 25) {
             let first_index = i;
             let last_index = Math.min(i + 25, list.length);
             let emailjsons = list.slice(first_index, last_index);
-            emailPromiseArr.push(sendEmailPromise(emailjsons,resource));
+            emailPromiseArr.push(sendEmailPromise(emailjsons, resource));
         }
         return emailPromiseArr;
     }
     // creates a promise with max 25 emails and returns it
     function sendEmailPromise(emailjsons, resource) {
         return new Promise((resolve, reject) => {
-        let Http = new XMLHttpRequest();
-        const url =
-            `https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/${resource}`;
-        Http.open("POST", url);
-        Http.setRequestHeader("Content-Type", "application/json");
-        let body = {
-            emails: emailjsons,
-        };
+            let Http = new XMLHttpRequest();
+            const url =
+                `https://rbx505a976.execute-api.us-east-1.amazonaws.com/prod/${resource}`;
+            Http.open("POST", url);
+            Http.setRequestHeader("Content-Type", "application/json");
+            let body = {
+                emails: emailjsons,
+            };
 
             Http.send(JSON.stringify(body));
             Http.onload = () => {
@@ -610,7 +615,7 @@ var emails_to_sagemaker = [];
 
     //todo add batch modify labels, 
 
-    function batchModifyLabels(emailids, addedLabelIdArr, removedLabelIdArr){
+    function batchModifyLabels(emailids, addedLabelIdArr, removedLabelIdArr) {
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
             let Http = new XMLHttpRequest();
             query = `/messages/batchModify`
@@ -619,9 +624,9 @@ var emails_to_sagemaker = [];
             Http.setRequestHeader("Content-Type", "application/json");
             Http.setRequestHeader("Authorization", `Bearer ${token}`);
             if (removedLabelIdArr.length == 0) {
-                body = JSON.stringify({ids: emailids, "addLabelIds": addedLabelIdArr });
+                body = JSON.stringify({ ids: emailids, "addLabelIds": addedLabelIdArr });
             } else {
-                body = JSON.stringify({ ids: emailids,"addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr });
+                body = JSON.stringify({ ids: emailids, "addLabelIds": addedLabelIdArr, "removeLabelIds": removedLabelIdArr });
             }
             Http.send(body);
             // Http.onreadystatechange = async (e) => {

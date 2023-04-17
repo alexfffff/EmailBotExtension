@@ -18,7 +18,6 @@ var number2 = 0;
 var number3 = 0;
 
 document.addEventListener("DOMContentLoaded", async function () {
-  console.log("hi");
 
   var emailAddress = document.getElementById("email-address");
   var toReviewNum = document.getElementById("review-email-num");
@@ -33,7 +32,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     const email = await getEmailPromise("/profile", "GET", token);
     emailAddress.innerText = JSON.parse(email)["emailAddress"];
 
+    console.log(email);
+
     //checkNomailLabel(token);
+
+    var links = document.getElementsByTagName("a");
+    for (var i = 0; i < links.length; i++) {
+        (function () {
+            var ln = links[i];
+            var location = ln.href;
+            ln.onclick = function () {
+                chrome.tabs.create({active: true, url: location});
+            };
+        })();
+    }
   });
 
   const number_dummy = await getLabelEmailCount2("nomail_inbox", "nomail_trash");

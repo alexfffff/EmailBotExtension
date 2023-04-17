@@ -38,6 +38,17 @@ body {
   font-size: 30px;
 }
 
+.header .title .upload-button {
+  position: absolute;
+  top: 87px;
+  left: 120px;
+}
+
+.header .title .upload-button img:hover {
+  background-color: #D7E0DC;
+  cursor: pointer;
+}
+
 .email {
   font-size: 16px;
 }
