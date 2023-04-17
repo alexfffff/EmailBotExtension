@@ -1,7 +1,7 @@
 //// alex+lucy
 var pageTokenlist = [];
 var nomailDict = {};
-var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent", "sorte_trash", "sorte_inbox"];
+var nomailLabels = ["nomail_keep", "nomail_delete", "nomail_keep_sent", "nomail_trash", "nomail_inbox"];
 var prevtime = 0;
 var currtime = 0;
 var finishedWhile = 0;
@@ -176,7 +176,7 @@ var emails_to_sagemaker = [];
             "messageListVisibility": "show",
             "labelListVisibility": "labelShow",
         });
-        if (labelName === "sorte_inbox") {
+        if (labelName === "nomail_inbox") {
             body = JSON.stringify({
                 "name": labelName,
                 "messageListVisibility": "show",
@@ -187,7 +187,7 @@ var emails_to_sagemaker = [];
                 },
             });
         }
-        if (labelName === "sorte_trash") {
+        if (labelName === "nomail_trash") {
             body = JSON.stringify({
                 "name": labelName,
                 "messageListVisibility": "show",
@@ -351,8 +351,8 @@ var emails_to_sagemaker = [];
 
                             }
                         }
-                        batchModifyLabels(email_pred_trash, [nomailDict["sorte_trash"]], []);
-                        batchModifyLabels(email_pred_inbox, [nomailDict["sorte_inbox"]], []);
+                        batchModifyLabels(email_pred_trash, [nomailDict["nomail_trash"]], []);
+                        batchModifyLabels(email_pred_inbox, [nomailDict["nomail_inbox"]], []);
                     }
                     document.getElementById('img-icon').src = 'https://img.icons8.com/material-outlined/512/checked.png';
                     setTimeout(function () {

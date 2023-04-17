@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   const number_dummy = await getLabelEmailCount2("nomail_inbox", "nomail_trash");
-  await new Promise(r => setTimeout(r, 2000));
+  await new Promise(r => setTimeout(r, 3000));
   console.log("number: " + number);
   toReviewNum.innerText = number + number2;
   detectedNum.innerText = number2;
