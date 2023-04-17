@@ -342,7 +342,6 @@ var emails_to_sagemaker = [];
                         let email_pred_inbox = [];
                         for (n = 0; n < email_pred.length; n++) {
                             let email_id = emails_to_sagemaker[n + i * 25].id;
-                            console.log(n + i * 25, ":", email_id)
                             if (email_pred[n] == 1) {
                                 email_pred_trash.push(email_id);
 
